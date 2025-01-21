@@ -28,7 +28,7 @@ const Index = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-spotify-darker text-white">
+      <div className="min-h-screen flex w-full bg-gradient-to-br from-spotify-darker via-[#1a2c1a] to-spotify-darker text-white">
         <DashboardSidebar />
         <main className="flex-1 p-8">
           <div className="max-w-7xl mx-auto">
