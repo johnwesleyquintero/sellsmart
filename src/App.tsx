@@ -7,6 +7,7 @@ import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import Admin from "./pages/Admin";
 
 const queryClient = new QueryClient();
 
@@ -15,6 +16,16 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
   if (!isAuthenticated) {
     return <Navigate to="/login" />;
+  }
+  return <>{children}</>;
+};
+
+// Admin route protection - in a real app, this would check for admin role
+const AdminRoute = ({ children }: { children: React.ReactNode }) => {
+  const isAuthenticated = localStorage.getItem("isAuthenticated") === "true";
+  const isAdmin = localStorage.getItem("isAdmin") === "true"; // Simple admin check
+  if (!isAuthenticated || !isAdmin) {
+    return <Navigate to="/dashboard" />;
   }
   return <>{children}</>;
 };
@@ -35,6 +46,14 @@ const App = () => (
               <ProtectedRoute>
                 <Dashboard />
               </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <AdminRoute>
+                <Admin />
+              </AdminRoute>
             }
           />
         </Routes>
