@@ -1,4 +1,6 @@
-export interface AmazonMetric {
+import { groupBy, sumBy } from 'lodash';
+
+interface AmazonMetric {
   fieldGroup: string;
   field: string;
   type: 'METRIC' | 'DIMENSION';
@@ -6,60 +8,138 @@ export interface AmazonMetric {
   value: number | string;
 }
 
-export const calculateMetrics = (data: any[]) => {
+// Key metrics we want to track
+const ESSENTIAL_METRICS = [
+  'Impressions',
+  'Clicks',
+  'Spend',
+  'Sales',
+  'Orders',
+  'ACOS',
+  'ROAS',
+  'CTR',
+  'Conversion Rate',
+  'ASIN',
+  'SKU',
+  'Search Term',
+  'Campaign Name',
+  'Ad Group Name',
+  'Date'
+];
+
+const aggregateMetricsByPeriod = (data: any[], period: 'week' | 'month') => {
+  const groupedData = groupBy(data, (item) => {
+    const date = new Date(item.Date);
+    if (period === 'week') {
+      const startOfWeek = new Date(date);
+      startOfWeek.setDate(date.getDate() - date.getDay());
+      return startOfWeek.toISOString().split('T')[0];
+    }
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+  });
+
+  return Object.entries(groupedData).map(([periodKey, items]) => ({
+    period: periodKey,
+    impressions: sumBy(items, 'Impressions'),
+    clicks: sumBy(items, 'Clicks'),
+    spend: sumBy(items, (item) => parseFloat((item.Spend || "0").replace("$", "").replace(",", ""))),
+    sales: sumBy(items, (item) => parseFloat((item["Total Sales"] || "0").replace("$", "").replace(",", ""))),
+    orders: sumBy(items, "Orders"),
+    acos: (sumBy(items, (item) => parseFloat((item.Spend || "0").replace("$", "").replace(",", ""))) / 
+          sumBy(items, (item) => parseFloat((item["Total Sales"] || "0").replace("$", "").replace(",", "")))) * 100,
+    roas: sumBy(items, (item) => parseFloat((item["Total Sales"] || "0").replace("$", "").replace(",", ""))) / 
+          sumBy(items, (item) => parseFloat((item.Spend || "0").replace("$", "").replace(",", ""))),
+    ctr: (sumBy(items, 'Clicks') / sumBy(items, 'Impressions')) * 100,
+  }));
+};
+
+const processDetailedMetrics = (data: any[]) => {
   return {
-    performance: {
-      impressions: data.reduce((sum, row) => sum + parseInt(row.Impressions || 0), 0),
-      clicks: data.reduce((sum, row) => sum + parseInt(row.Clicks || 0), 0),
-      spend: data.reduce((sum, row) => sum + parseFloat((row.Spend || "0").replace("$", "").replace(",", "")), 0),
-      ctr: data.reduce((sum, row) => sum + parseFloat((row["Click-Thru Rate (CTR)"] || "0").replace("%", "")), 0) / data.length,
-      conversionRate: data.reduce((sum, row) => sum + parseFloat((row["7 Day Conversion Rate"] || "0").replace("%", "")), 0) / data.length,
-      roas: data.reduce((sum, row) => {
-        const roas = parseFloat((row["Total Return on Advertising Spend (ROAS)"] || "0").toString());
-        return sum + (isNaN(roas) ? 0 : roas);
-      }, 0) / data.length,
-    },
-    sales: {
-      totalSales: data.reduce((sum, row) => {
-        const sales = parseFloat((row["7 Day Total Sales"] || "0").replace("$", "").replace(",", ""));
-        return sum + (isNaN(sales) ? 0 : sales);
-      }, 0),
-      totalOrders: data.reduce((sum, row) => sum + parseInt(row["7 Day Total Orders (#)"] || 0), 0),
-    },
-    campaignMetrics: processCampaignMetrics(data)
+    asinMetrics: processAsinMetrics(data),
+    searchTermMetrics: processSearchTermMetrics(data),
+    skuMetrics: processSkuMetrics(data)
   };
 };
 
-const processCampaignMetrics = (data: any[]) => {
-  const campaigns = new Map();
-  
-  data.forEach(row => {
-    const campaignName = row["Campaign Name"];
-    if (!campaignName) return;
-    
-    if (!campaigns.has(campaignName)) {
-      campaigns.set(campaignName, {
-        spend: 0,
-        impressions: 0,
-        clicks: 0,
-        orders: 0,
-        sales: 0
-      });
-    }
-    
-    const campaign = campaigns.get(campaignName);
-    campaign.spend += parseFloat((row.Spend || "0").replace("$", "").replace(",", ""));
-    campaign.impressions += parseInt(row.Impressions || 0);
-    campaign.clicks += parseInt(row.Clicks || 0);
-    campaign.orders += parseInt(row["7 Day Total Orders (#)"] || 0);
-    campaign.sales += parseFloat((row["7 Day Total Sales"] || "0").replace("$", "").replace(",", ""));
-  });
-  
-  return Array.from(campaigns.entries()).map(([name, metrics]) => ({
-    name,
-    ...metrics,
-    ctr: (metrics.clicks / metrics.impressions * 100).toFixed(2),
-    acos: ((metrics.spend / metrics.sales) * 100).toFixed(2),
-    roas: (metrics.sales / metrics.spend).toFixed(2)
+const processAsinMetrics = (data: any[]) => {
+  const groupedByAsin = groupBy(data, 'Advertised ASIN');
+  return Object.entries(groupedByAsin).map(([asin, items]) => ({
+    asin,
+    impressions: sumBy(items, 'Impressions'),
+    clicks: sumBy(items, 'Clicks'),
+    spend: sumBy(items, (item) => parseFloat((item.Spend || "0").replace("$", "").replace(",", ""))),
+    sales: sumBy(items, (item) => parseFloat((item["Total Sales"] || "0").replace("$", "").replace(",", ""))),
+    orders: sumBy(items, "Orders"),
+    conversionRate: (sumBy(items, "Orders") / sumBy(items, 'Clicks')) * 100,
+    title: items[0]["Advertised product title"] || "N/A",
+    category: items[0]["Advertised product category"] || "N/A"
   }));
+};
+
+const processSearchTermMetrics = (data: any[]) => {
+  const groupedBySearchTerm = groupBy(data, 'Search term');
+  return Object.entries(groupedBySearchTerm).map(([searchTerm, items]) => ({
+    searchTerm,
+    impressions: sumBy(items, 'Impressions'),
+    clicks: sumBy(items, 'Clicks'),
+    spend: sumBy(items, (item) => parseFloat((item.Spend || "0").replace("$", "").replace(",", ""))),
+    sales: sumBy(items, (item) => parseFloat((item["Total Sales"] || "0").replace("$", "").replace(",", ""))),
+    orders: sumBy(items, "Orders"),
+    conversionRate: (sumBy(items, "Orders") / sumBy(items, 'Clicks')) * 100
+  }));
+};
+
+const processSkuMetrics = (data: any[]) => {
+  const groupedBySku = groupBy(data, 'Advertised SKU');
+  return Object.entries(groupedBySku).map(([sku, items]) => ({
+    sku,
+    impressions: sumBy(items, 'Impressions'),
+    clicks: sumBy(items, 'Clicks'),
+    spend: sumBy(items, (item) => parseFloat((item.Spend || "0").replace("$", "").replace(",", ""))),
+    sales: sumBy(items, (item) => parseFloat((item["Total Sales"] || "0").replace("$", "").replace(",", ""))),
+    orders: sumBy(items, "Orders"),
+    conversionRate: (sumBy(items, "Orders") / sumBy(items, 'Clicks')) * 100
+  }));
+};
+
+export const calculateMetrics = (data: any[]) => {
+  // Filter out irrelevant columns
+  const filteredData = data.map(row => {
+    const filteredRow: any = {};
+    ESSENTIAL_METRICS.forEach(metric => {
+      if (row[metric] !== undefined) {
+        filteredRow[metric] = row[metric];
+      }
+    });
+    return filteredRow;
+  });
+
+  // Calculate aggregated metrics
+  const weeklyMetrics = aggregateMetricsByPeriod(filteredData, 'week');
+  const monthlyMetrics = aggregateMetricsByPeriod(filteredData, 'month');
+  const detailedMetrics = processDetailedMetrics(filteredData);
+
+  // Calculate overall performance metrics
+  const performance = {
+    impressions: sumBy(filteredData, 'Impressions'),
+    clicks: sumBy(filteredData, 'Clicks'),
+    spend: sumBy(filteredData, (item) => parseFloat((item.Spend || "0").replace("$", "").replace(",", ""))),
+    ctr: (sumBy(filteredData, 'Clicks') / sumBy(filteredData, 'Impressions')) * 100,
+    conversionRate: (sumBy(filteredData, "Orders") / sumBy(filteredData, 'Clicks')) * 100,
+    roas: sumBy(filteredData, (item) => parseFloat((item["Total Sales"] || "0").replace("$", "").replace(",", ""))) / 
+          sumBy(filteredData, (item) => parseFloat((item.Spend || "0").replace("$", "").replace(",", "")))
+  };
+
+  const sales = {
+    totalSales: sumBy(filteredData, (item) => parseFloat((item["Total Sales"] || "0").replace("$", "").replace(",", ""))),
+    totalOrders: sumBy(filteredData, "Orders")
+  };
+
+  return {
+    performance,
+    sales,
+    weeklyMetrics,
+    monthlyMetrics,
+    detailedMetrics
+  };
 };
