@@ -82,30 +82,36 @@ interface MetricsDisplayProps {
 }
 
 export function AmazonMetricsDisplay({ metrics }: MetricsDisplayProps) {
+  // Add null checks and default values
+  const totalSales = metrics?.sales?.totalSales ?? 0;
+  const totalOrders = metrics?.sales?.totalOrders ?? 0;
+  const roas = metrics?.performance?.roas ?? 0;
+  const conversionRate = metrics?.performance?.conversionRate ?? 0;
+
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <MetricCard
           title="Total Sales"
-          value={`$${metrics.sales.totalSales.toLocaleString()}`}
+          value={`$${totalSales.toLocaleString()}`}
           trend={10}
           icon={<DollarSign className="w-4 h-4" />}
         />
         <MetricCard
           title="ROAS"
-          value={`${metrics.performance.roas.toFixed(2)}x`}
+          value={`${roas.toFixed(2)}x`}
           trend={5}
           icon={<TrendingUp className="w-4 h-4" />}
         />
         <MetricCard
           title="Total Orders"
-          value={metrics.sales.totalOrders.toString()}
+          value={totalOrders.toString()}
           trend={15}
           icon={<ShoppingCart className="w-4 h-4" />}
         />
         <MetricCard
           title="Conversion Rate"
-          value={`${metrics.performance.conversionRate.toFixed(2)}%`}
+          value={`${conversionRate.toFixed(2)}%`}
           trend={8}
           icon={<BarChart className="w-4 h-4" />}
         />
