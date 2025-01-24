@@ -1,30 +1,23 @@
 import { DashboardSidebar } from "@/components/DashboardSidebar";
-import { MetricCard } from "@/components/MetricCard";
-import { AdSpendChart } from "@/components/AdSpendChart";
 import { DataImport } from "@/components/DataImport";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { DollarSign, TrendingUp, Target, BarChart2, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { CampaignPerformanceChart } from "@/components/metrics/CampaignPerformanceChart";
+import { SearchTermAnalysis } from "@/components/metrics/SearchTermAnalysis";
+import { useState } from "react";
 
-const Index = () => {
-  // Sample data - in a real app this would come from an API
-  const metrics = {
-    adSpend: { value: 189.57, trend: -10.25 },
-    impressions: { value: 139710, trend: 14.03 },
-    acos: { value: 27.15, trend: 43.82 },
-    revenue: { value: 698.3, trend: 59.75 }
-  };
+const Dashboard = () => {
+  const [metrics, setMetrics] = useState<any>(null);
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Add search functionality here
     console.log("Search submitted");
   };
 
   const handleDateRangeChange = (range: string) => {
     console.log("Date range changed:", range);
-    // Update metrics and charts based on new date range
   };
 
   return (
@@ -63,79 +56,20 @@ const Index = () => {
               </div>
             </div>
 
-            {/* Data Import Section */}
             <div className="mb-8">
               <DataImport />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-              <MetricCard
-                title="Ad Spend"
-                value={`$${metrics.adSpend.value}`}
-                trend={metrics.adSpend.trend}
-                icon={<DollarSign className="w-4 h-4" />}
-              />
-              <MetricCard
-                title="Impressions"
-                value={`${(metrics.impressions.value / 1000).toFixed(2)}k`}
-                trend={metrics.impressions.trend}
-                icon={<TrendingUp className="w-4 h-4" />}
-              />
-              <MetricCard
-                title="ACoS"
-                value={`${metrics.acos.value}%`}
-                trend={metrics.acos.trend}
-                icon={<Target className="w-4 h-4" />}
-              />
-              <MetricCard
-                title="Ad Revenue"
-                value={`$${metrics.revenue.value}`}
-                trend={metrics.revenue.trend}
-                icon={<BarChart2 className="w-4 h-4" />}
-              />
-            </div>
-
-            <div className="grid gap-4 mb-8">
-              <div className="rounded-lg bg-spotify-light p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-semibold">Ad Spend Overview</h2>
-                  <select 
-                    className="bg-spotify-darker border border-gray-700 rounded-md px-3 py-2 text-sm"
-                    defaultValue="daily"
-                  >
-                    <option value="daily">Daily</option>
-                    <option value="weekly">Weekly</option>
-                    <option value="monthly">Monthly</option>
-                  </select>
+            {metrics && (
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                <div className="lg:col-span-2">
+                  <CampaignPerformanceChart data={metrics.weeklyMetrics} />
                 </div>
-                <AdSpendChart />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-              <div className="lg:col-span-2 rounded-lg bg-spotify-light p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-semibold">Campaign Performance</h2>
-                  <Button variant="outline" size="sm">
-                    Export Data
-                  </Button>
-                </div>
-                <div className="h-[300px] flex items-center justify-center text-gray-400">
-                  Campaign metrics chart will be displayed here
+                <div>
+                  <SearchTermAnalysis data={metrics.detailedMetrics.searchTermMetrics} />
                 </div>
               </div>
-              <div className="rounded-lg bg-spotify-light p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-semibold">Search Terms Analysis</h2>
-                  <Button variant="outline" size="sm">
-                    View All
-                  </Button>
-                </div>
-                <div className="h-[300px] flex items-center justify-center text-gray-400">
-                  Search terms chart will be displayed here
-                </div>
-              </div>
-            </div>
+            )}
           </div>
         </main>
       </div>
@@ -143,4 +77,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Dashboard;
