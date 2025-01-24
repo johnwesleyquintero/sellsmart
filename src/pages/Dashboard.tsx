@@ -1,6 +1,7 @@
 import { DashboardSidebar } from "@/components/DashboardSidebar";
 import { MetricCard } from "@/components/MetricCard";
 import { AdSpendChart } from "@/components/AdSpendChart";
+import { DataImport } from "@/components/DataImport";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { DollarSign, TrendingUp, Target, BarChart2, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -60,6 +61,11 @@ const Index = () => {
                   <option value="90">Last 90 days</option>
                 </select>
               </div>
+            </div>
+
+            {/* Data Import Section */}
+            <div className="mb-8">
+              <DataImport />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
