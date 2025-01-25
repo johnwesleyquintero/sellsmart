@@ -1,32 +1,45 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     
-    // Mock login - in a real app, this would validate against a backend
-    if (email && password) {
-      localStorage.setItem("isAuthenticated", "true");
-      
-      // Mock admin check - in a real app, this would be handled by your backend
-      if (email === "admin@example.com") {
-        localStorage.setItem("isAdmin", "true");
-        navigate("/admin");
-      } else {
-        localStorage.setItem("isAdmin", "false");
-        navigate("/dashboard");
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        toast.error(error.message);
+        return;
       }
-      
-      toast.success("Successfully logged in!");
+
+      if (data.user) {
+        // Check if user is admin (email matches)
+        const isAdmin = data.user.email === "johnwesleyquintero@gmail.com";
+        localStorage.setItem("isAdmin", isAdmin.toString());
+        localStorage.setItem("isAuthenticated", "true");
+        
+        toast.success("Successfully logged in!");
+        navigate(isAdmin ? "/admin" : "/dashboard");
+      }
+    } catch (error) {
+      toast.error("An error occurred during login");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -42,6 +55,7 @@ const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="bg-white/10 border-0 text-white placeholder:text-gray-400"
+              disabled={isLoading}
             />
           </div>
           <div>
@@ -51,16 +65,17 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="bg-white/10 border-0 text-white placeholder:text-gray-400"
+              disabled={isLoading}
             />
           </div>
-          <Button type="submit" className="w-full">
-            Login
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? "Logging in..." : "Login"}
           </Button>
           <p className="text-center text-sm text-gray-400">
             Don't have an account?{" "}
-            <a href="/register" className="text-white hover:underline">
+            <Link to="/register" className="text-white hover:underline">
               Register
-            </a>
+            </Link>
           </p>
         </form>
       </Card>

@@ -114,6 +114,18 @@ export type Database = {
             }
             Returns: string
           }
+      upsert_sales_data: {
+        Args: {
+          p_user_id: string
+          p_date: string
+          p_sales: number
+          p_ad_spend: number
+          p_orders: number
+          p_ad_clicks: number
+          p_ad_impressions: number
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

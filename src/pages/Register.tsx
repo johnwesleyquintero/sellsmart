@@ -3,16 +3,19 @@ import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !password || !confirmPassword) {
+    if (!email || !password || !confirmPassword || !companyName) {
       toast.error("Please fill in all fields");
       return;
     }
@@ -20,9 +23,33 @@ const Register = () => {
       toast.error("Passwords do not match");
       return;
     }
-    // TODO: Implement actual registration
-    toast.success("Registration successful!");
-    navigate("/login");
+
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            company_name: companyName,
+          },
+        },
+      });
+
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
+
+      if (data) {
+        toast.success("Registration successful! Please check your email to verify your account.");
+        navigate("/login");
+      }
+    } catch (error) {
+      toast.error("An error occurred during registration");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -41,6 +68,17 @@ const Register = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full"
+              disabled={isLoading}
+            />
+          </div>
+          <div>
+            <Input
+              type="text"
+              placeholder="Company Name"
+              value={companyName}
+              onChange={(e) => setCompanyName(e.target.value)}
+              className="w-full"
+              disabled={isLoading}
             />
           </div>
           <div>
@@ -50,6 +88,7 @@ const Register = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full"
+              disabled={isLoading}
             />
           </div>
           <div>
@@ -59,10 +98,11 @@ const Register = () => {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               className="w-full"
+              disabled={isLoading}
             />
           </div>
-          <Button type="submit" className="w-full bg-spotify-green hover:bg-spotify-green/90">
-            Create Account
+          <Button type="submit" className="w-full bg-spotify-green hover:bg-spotify-green/90" disabled={isLoading}>
+            {isLoading ? "Creating Account..." : "Create Account"}
           </Button>
         </form>
 
