@@ -1,135 +1,129 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { MetricCard } from "@/components/MetricCard";
+import { BarChart, DollarSign, TrendingUp, ShoppingCart } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { MetricsOverview } from "./metrics/MetricsOverview";
-import { PerformanceTable } from "./metrics/PerformanceTable";
-import { PeriodMetrics, PerformanceMetrics, SalesMetrics } from "@/types/metrics";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
-export function AmazonMetricsDisplay() {
-  const { data: metricsData, isLoading } = useQuery({
-    queryKey: ['amazonMetrics'],
-    queryFn: async () => {
-      const { data: salesData, error: salesError } = await supabase
-        .from('sales_data')
-        .select('*')
-        .order('date', { ascending: false });
+interface MetricsDisplayProps {
+  metrics: {
+    performance: {
+      impressions: number;
+      clicks: number;
+      spend: number;
+      ctr: number;
+      conversionRate: number;
+      roas: number;
+    };
+    sales: {
+      totalSales: number;
+      totalOrders: number;
+    };
+    weeklyMetrics: Array<{
+      period: string;
+      impressions: number;
+      clicks: number;
+      spend: number;
+      sales: number;
+      orders: number;
+      acos: number;
+      roas: number;
+      ctr: number;
+    }>;
+    monthlyMetrics: Array<{
+      period: string;
+      impressions: number;
+      clicks: number;
+      spend: number;
+      sales: number;
+      orders: number;
+      acos: number;
+      roas: number;
+      ctr: number;
+    }>;
+    detailedMetrics: {
+      asinMetrics: Array<{
+        asin: string;
+        impressions: number;
+        clicks: number;
+        spend: number;
+        sales: number;
+        orders: number;
+        conversionRate: number;
+        title: string;
+        category: string;
+      }>;
+      searchTermMetrics: Array<{
+        searchTerm: string;
+        impressions: number;
+        clicks: number;
+        spend: number;
+        sales: number;
+        orders: number;
+        conversionRate: number;
+      }>;
+      skuMetrics: Array<{
+        sku: string;
+        impressions: number;
+        clicks: number;
+        spend: number;
+        sales: number;
+        orders: number;
+        conversionRate: number;
+      }>;
+    };
+  };
+}
 
-      if (salesError) throw salesError;
-
-      // Calculate overall metrics
-      const totalSales = salesData.reduce((sum, item) => sum + Number(item.sales), 0);
-      const totalOrders = salesData.reduce((sum, item) => sum + item.orders, 0);
-      const totalSpend = salesData.reduce((sum, item) => sum + Number(item.ad_spend), 0);
-      const totalClicks = salesData.reduce((sum, item) => sum + item.ad_clicks, 0);
-      const totalImpressions = salesData.reduce((sum, item) => sum + item.ad_impressions, 0);
-
-      const performance: PerformanceMetrics = {
-        impressions: totalImpressions,
-        clicks: totalClicks,
-        spend: totalSpend,
-        ctr: (totalClicks / totalImpressions) * 100 || 0,
-        conversionRate: (totalOrders / totalClicks) * 100 || 0,
-        roas: totalSales / totalSpend || 0
-      };
-
-      const sales: SalesMetrics = {
-        totalSales,
-        totalOrders
-      };
-
-      // Group by week
-      const weeklyMetrics: PeriodMetrics[] = Object.values(salesData.reduce((acc, item) => {
-        const date = new Date(item.date);
-        const week = `${date.getFullYear()}-W${Math.ceil((date.getDate() + date.getDay()) / 7)}`;
-        
-        if (!acc[week]) {
-          acc[week] = {
-            period: `Week ${Math.ceil((date.getDate() + date.getDay()) / 7)}`,
-            impressions: 0,
-            clicks: 0,
-            spend: 0,
-            sales: 0,
-            orders: 0,
-            acos: 0,
-            roas: 0,
-            ctr: 0
-          };
-        }
-
-        acc[week].impressions += item.ad_impressions;
-        acc[week].clicks += item.ad_clicks;
-        acc[week].spend += Number(item.ad_spend);
-        acc[week].sales += Number(item.sales);
-        acc[week].orders += item.orders;
-        
-        acc[week].acos = (acc[week].spend / acc[week].sales) * 100 || 0;
-        acc[week].roas = acc[week].sales / acc[week].spend || 0;
-        acc[week].ctr = (acc[week].clicks / acc[week].impressions) * 100 || 0;
-
-        return acc;
-      }, {} as Record<string, PeriodMetrics>));
-
-      // Group by month
-      const monthlyMetrics: PeriodMetrics[] = Object.values(salesData.reduce((acc, item) => {
-        const date = new Date(item.date);
-        const month = date.toLocaleString('default', { month: 'long' });
-        
-        if (!acc[month]) {
-          acc[month] = {
-            period: month,
-            impressions: 0,
-            clicks: 0,
-            spend: 0,
-            sales: 0,
-            orders: 0,
-            acos: 0,
-            roas: 0,
-            ctr: 0
-          };
-        }
-
-        acc[month].impressions += item.ad_impressions;
-        acc[month].clicks += item.ad_clicks;
-        acc[month].spend += Number(item.ad_spend);
-        acc[month].sales += Number(item.sales);
-        acc[month].orders += item.orders;
-        
-        acc[month].acos = (acc[month].spend / acc[month].sales) * 100 || 0;
-        acc[month].roas = acc[month].sales / acc[month].spend || 0;
-        acc[month].ctr = (acc[month].clicks / acc[month].impressions) * 100 || 0;
-
-        return acc;
-      }, {} as Record<string, PeriodMetrics>));
-
-      return {
-        performance,
-        sales,
-        weeklyMetrics,
-        monthlyMetrics
-      };
-    }
-  });
-
-  if (isLoading) {
-    return <div>Loading metrics...</div>;
-  }
-
-  if (!metricsData) {
-    return <div>No metrics data available</div>;
-  }
+export function AmazonMetricsDisplay({ metrics }: MetricsDisplayProps) {
+  // Add null checks and default values
+  const totalSales = metrics?.sales?.totalSales ?? 0;
+  const totalOrders = metrics?.sales?.totalOrders ?? 0;
+  const roas = metrics?.performance?.roas ?? 0;
+  const conversionRate = metrics?.performance?.conversionRate ?? 0;
 
   return (
     <div className="space-y-6">
-      <MetricsOverview 
-        sales={metricsData.sales}
-        performance={metricsData.performance}
-      />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <MetricCard
+          title="Total Sales"
+          value={`$${totalSales.toLocaleString()}`}
+          trend={10}
+          icon={<DollarSign className="w-4 h-4" />}
+        />
+        <MetricCard
+          title="ROAS"
+          value={`${roas.toFixed(2)}x`}
+          trend={5}
+          icon={<TrendingUp className="w-4 h-4" />}
+        />
+        <MetricCard
+          title="Total Orders"
+          value={totalOrders.toString()}
+          trend={15}
+          icon={<ShoppingCart className="w-4 h-4" />}
+        />
+        <MetricCard
+          title="Conversion Rate"
+          value={`${conversionRate.toFixed(2)}%`}
+          trend={8}
+          icon={<BarChart className="w-4 h-4" />}
+        />
+      </div>
 
       <Tabs defaultValue="weekly" className="w-full">
         <TabsList>
           <TabsTrigger value="weekly">Weekly Analysis</TabsTrigger>
           <TabsTrigger value="monthly">Monthly Analysis</TabsTrigger>
+          <TabsTrigger value="asin">ASIN Analysis</TabsTrigger>
+          <TabsTrigger value="search">Search Terms</TabsTrigger>
+          <TabsTrigger value="sku">SKU Analysis</TabsTrigger>
         </TabsList>
 
         <TabsContent value="weekly">
@@ -138,10 +132,34 @@ export function AmazonMetricsDisplay() {
               <CardTitle>Weekly Performance</CardTitle>
             </CardHeader>
             <CardContent>
-              <PerformanceTable 
-                data={metricsData.weeklyMetrics}
-                title="Week"
-              />
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="text-gray-400">Week</TableHead>
+                      <TableHead className="text-gray-400">Spend</TableHead>
+                      <TableHead className="text-gray-400">Sales</TableHead>
+                      <TableHead className="text-gray-400">ROAS</TableHead>
+                      <TableHead className="text-gray-400">ACoS</TableHead>
+                      <TableHead className="text-gray-400">CTR</TableHead>
+                      <TableHead className="text-gray-400">Orders</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {metrics.weeklyMetrics.map((week, index) => (
+                      <TableRow key={index}>
+                        <TableCell className="font-medium">{week.period}</TableCell>
+                        <TableCell>${week.spend.toLocaleString()}</TableCell>
+                        <TableCell>${week.sales.toLocaleString()}</TableCell>
+                        <TableCell>{week.roas.toFixed(2)}x</TableCell>
+                        <TableCell>{week.acos.toFixed(2)}%</TableCell>
+                        <TableCell>{week.ctr.toFixed(2)}%</TableCell>
+                        <TableCell>{week.orders}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
@@ -152,10 +170,148 @@ export function AmazonMetricsDisplay() {
               <CardTitle>Monthly Performance</CardTitle>
             </CardHeader>
             <CardContent>
-              <PerformanceTable 
-                data={metricsData.monthlyMetrics}
-                title="Month"
-              />
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="text-gray-400">Month</TableHead>
+                      <TableHead className="text-gray-400">Spend</TableHead>
+                      <TableHead className="text-gray-400">Sales</TableHead>
+                      <TableHead className="text-gray-400">ROAS</TableHead>
+                      <TableHead className="text-gray-400">ACoS</TableHead>
+                      <TableHead className="text-gray-400">CTR</TableHead>
+                      <TableHead className="text-gray-400">Orders</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {metrics.monthlyMetrics.map((month, index) => (
+                      <TableRow key={index}>
+                        <TableCell className="font-medium">{month.period}</TableCell>
+                        <TableCell>${month.spend.toLocaleString()}</TableCell>
+                        <TableCell>${month.sales.toLocaleString()}</TableCell>
+                        <TableCell>{month.roas.toFixed(2)}x</TableCell>
+                        <TableCell>{month.acos.toFixed(2)}%</TableCell>
+                        <TableCell>{month.ctr.toFixed(2)}%</TableCell>
+                        <TableCell>{month.orders}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="asin">
+          <Card className="bg-spotify-light text-white">
+            <CardHeader>
+              <CardTitle>ASIN Performance</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="text-gray-400">ASIN</TableHead>
+                      <TableHead className="text-gray-400">Title</TableHead>
+                      <TableHead className="text-gray-400">Category</TableHead>
+                      <TableHead className="text-gray-400">Spend</TableHead>
+                      <TableHead className="text-gray-400">Sales</TableHead>
+                      <TableHead className="text-gray-400">Conv. Rate</TableHead>
+                      <TableHead className="text-gray-400">Orders</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {metrics.detailedMetrics.asinMetrics.map((asin, index) => (
+                      <TableRow key={index}>
+                        <TableCell className="font-medium">{asin.asin}</TableCell>
+                        <TableCell>{asin.title}</TableCell>
+                        <TableCell>{asin.category}</TableCell>
+                        <TableCell>${asin.spend.toLocaleString()}</TableCell>
+                        <TableCell>${asin.sales.toLocaleString()}</TableCell>
+                        <TableCell>{asin.conversionRate.toFixed(2)}%</TableCell>
+                        <TableCell>{asin.orders}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="search">
+          <Card className="bg-spotify-light text-white">
+            <CardHeader>
+              <CardTitle>Search Term Performance</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="text-gray-400">Search Term</TableHead>
+                      <TableHead className="text-gray-400">Impressions</TableHead>
+                      <TableHead className="text-gray-400">Clicks</TableHead>
+                      <TableHead className="text-gray-400">Spend</TableHead>
+                      <TableHead className="text-gray-400">Sales</TableHead>
+                      <TableHead className="text-gray-400">Conv. Rate</TableHead>
+                      <TableHead className="text-gray-400">Orders</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {metrics.detailedMetrics.searchTermMetrics.map((term, index) => (
+                      <TableRow key={index}>
+                        <TableCell className="font-medium">{term.searchTerm}</TableCell>
+                        <TableCell>{term.impressions.toLocaleString()}</TableCell>
+                        <TableCell>{term.clicks.toLocaleString()}</TableCell>
+                        <TableCell>${term.spend.toLocaleString()}</TableCell>
+                        <TableCell>${term.sales.toLocaleString()}</TableCell>
+                        <TableCell>{term.conversionRate.toFixed(2)}%</TableCell>
+                        <TableCell>{term.orders}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="sku">
+          <Card className="bg-spotify-light text-white">
+            <CardHeader>
+              <CardTitle>SKU Performance</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="text-gray-400">SKU</TableHead>
+                      <TableHead className="text-gray-400">Impressions</TableHead>
+                      <TableHead className="text-gray-400">Clicks</TableHead>
+                      <TableHead className="text-gray-400">Spend</TableHead>
+                      <TableHead className="text-gray-400">Sales</TableHead>
+                      <TableHead className="text-gray-400">Conv. Rate</TableHead>
+                      <TableHead className="text-gray-400">Orders</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {metrics.detailedMetrics.skuMetrics.map((sku, index) => (
+                      <TableRow key={index}>
+                        <TableCell className="font-medium">{sku.sku}</TableCell>
+                        <TableCell>{sku.impressions.toLocaleString()}</TableCell>
+                        <TableCell>{sku.clicks.toLocaleString()}</TableCell>
+                        <TableCell>${sku.spend.toLocaleString()}</TableCell>
+                        <TableCell>${sku.sales.toLocaleString()}</TableCell>
+                        <TableCell>{sku.conversionRate.toFixed(2)}%</TableCell>
+                        <TableCell>{sku.orders}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
