@@ -16,6 +16,12 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
     
+    if (!email || !password) {
+      toast.error("Please fill in all fields");
+      setIsLoading(false);
+      return;
+    }
+    
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -23,21 +29,23 @@ const Login = () => {
       });
 
       if (error) {
-        toast.error(error.message);
+        if (error.message === "Invalid login credentials") {
+          toast.error("Invalid email or password. Please try again.");
+        } else if (error.message.includes("Email not confirmed")) {
+          toast.error("Please verify your email before logging in.");
+        } else {
+          toast.error(error.message);
+        }
         return;
       }
 
       if (data.user) {
-        // Check if user is admin (email matches)
         const isAdmin = data.user.email === "johnwesleyquintero@gmail.com";
-        localStorage.setItem("isAdmin", isAdmin.toString());
-        localStorage.setItem("isAuthenticated", "true");
-        
         toast.success("Successfully logged in!");
         navigate(isAdmin ? "/admin" : "/dashboard");
       }
     } catch (error) {
-      toast.error("An error occurred during login");
+      toast.error("An unexpected error occurred. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -56,6 +64,7 @@ const Login = () => {
               onChange={(e) => setEmail(e.target.value)}
               className="bg-white/10 border-0 text-white placeholder:text-gray-400"
               disabled={isLoading}
+              required
             />
           </div>
           <div>
@@ -66,6 +75,7 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
               className="bg-white/10 border-0 text-white placeholder:text-gray-400"
               disabled={isLoading}
+              required
             />
           </div>
           <Button type="submit" className="w-full" disabled={isLoading}>
