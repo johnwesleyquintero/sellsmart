@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CampaignPerformanceChart } from "@/components/metrics/CampaignPerformanceChart";
 import { SearchTermAnalysis } from "@/components/metrics/SearchTermAnalysis";
+import { AmazonMetricsDisplay } from "@/components/AmazonMetricsDisplay";
+import { TargetsOverview } from "@/components/metrics/TargetsOverview";
 import { useState } from "react";
 
 const Dashboard = () => {
@@ -56,20 +58,25 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <div className="mb-8">
-              <DataImport />
-            </div>
-
-            {metrics && (
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                <div className="lg:col-span-2">
-                  <CampaignPerformanceChart data={metrics.weeklyMetrics} />
-                </div>
-                <div>
-                  <SearchTermAnalysis data={metrics.detailedMetrics.searchTermMetrics} />
-                </div>
+            <div className="space-y-8">
+              <AmazonMetricsDisplay />
+              
+              <div className="bg-spotify-light rounded-lg p-6">
+                <h2 className="text-xl font-semibold mb-4">Performance Targets</h2>
+                <TargetsOverview />
               </div>
-            )}
+
+              {metrics && (
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                  <div className="lg:col-span-2">
+                    <CampaignPerformanceChart data={metrics.weeklyMetrics} />
+                  </div>
+                  <div>
+                    <SearchTermAnalysis data={metrics.detailedMetrics.searchTermMetrics} />
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </main>
       </div>

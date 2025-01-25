@@ -9,6 +9,45 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      campaign_targets: {
+        Row: {
+          created_at: string
+          current_value: number | null
+          end_date: string
+          id: string
+          name: string
+          start_date: string
+          target_type: string
+          target_value: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_value?: number | null
+          end_date: string
+          id?: string
+          name: string
+          start_date: string
+          target_type: string
+          target_value: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          current_value?: number | null
+          end_date?: string
+          id?: string
+          name?: string
+          start_date?: string
+          target_type?: string
+          target_value?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profile_creation_errors: {
         Row: {
           created_at: string | null
