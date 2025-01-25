@@ -12,24 +12,19 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Upload, FileSpreadsheet, Table } from "lucide-react";
-import { calculateMetrics } from "@/utils/amazonMetrics";
 import { AmazonMetricsDisplay } from "./AmazonMetricsDisplay";
 
 export function DataImport() {
   const [importedData, setImportedData] = useState<any[]>([]);
-  const [metrics, setMetrics] = useState<any>(null);
   const { toast } = useToast();
 
   const processData = (data: any[]) => {
     setImportedData(data);
-    const calculatedMetrics = calculateMetrics(data);
-    setMetrics(calculatedMetrics);
     
     toast({
       title: "Data processed successfully",
       description: `${data.length} rows processed with metrics calculated`,
     });
-    console.log("Processed metrics:", calculatedMetrics);
   };
 
   const handleCSVUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -142,9 +137,7 @@ export function DataImport() {
         </CardContent>
       </Card>
 
-      {metrics && (
-        <AmazonMetricsDisplay metrics={metrics} />
-      )}
+      <AmazonMetricsDisplay />
 
       {importedData.length > 0 && (
         <Card className="bg-spotify-light text-white">
