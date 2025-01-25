@@ -89,15 +89,20 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      calculate_metrics: {
-        Args: {
-          p_sales: number
-          p_ad_spend: number
-          p_ad_clicks: number
-          p_ad_impressions: number
-        }
-        Returns: Json
-      }
+      calculate_metrics:
+        | {
+            Args: Record<PropertyKey, never>
+            Returns: undefined
+          }
+        | {
+            Args: {
+              p_sales: number
+              p_ad_spend: number
+              p_ad_clicks: number
+              p_ad_impressions: number
+            }
+            Returns: Json
+          }
       pg_get_tabledef:
         | {
             Args: Record<PropertyKey, never>
