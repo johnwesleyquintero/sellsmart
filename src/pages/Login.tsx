@@ -24,18 +24,21 @@ const Login = () => {
     
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+        email: email.trim(),
+        password: password.trim(),
       });
 
       if (error) {
+        console.error("Login error:", error);
+        
         if (error.message === "Invalid login credentials") {
-          toast.error("Invalid email or password. Please try again.");
+          toast.error("Email or password is incorrect. Please try again.");
         } else if (error.message.includes("Email not confirmed")) {
           toast.error("Please verify your email before logging in.");
         } else {
-          toast.error(error.message);
+          toast.error("Login failed. Please try again.");
         }
+        setIsLoading(false);
         return;
       }
 
@@ -45,6 +48,7 @@ const Login = () => {
         navigate(isAdmin ? "/admin" : "/dashboard");
       }
     } catch (error) {
+      console.error("Unexpected error:", error);
       toast.error("An unexpected error occurred. Please try again.");
     } finally {
       setIsLoading(false);
@@ -78,7 +82,11 @@ const Login = () => {
               required
             />
           </div>
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <Button 
+            type="submit" 
+            className="w-full bg-green-600 hover:bg-green-700" 
+            disabled={isLoading}
+          >
             {isLoading ? "Logging in..." : "Login"}
           </Button>
           <p className="text-center text-sm text-gray-400">
