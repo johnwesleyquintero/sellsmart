@@ -18,14 +18,30 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Search } from "lucide-react";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import { Search, Edit2, Trash2, UserX, UserCheck } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useToast } from "@/hooks/use-toast";
 
 // Mock data - in a real app, this would come from your backend
 const users = [
   { id: 1, email: "user1@example.com", plan: "Pro", status: "Active" },
   { id: 2, email: "user2@example.com", plan: "Basic", status: "Active" },
   { id: 3, email: "user3@example.com", plan: "Pro", status: "Inactive" },
+  // Add more mock users for pagination testing
+  ...Array.from({ length: 7 }, (_, i) => ({
+    id: i + 4,
+    email: `user${i + 4}@example.com`,
+    plan: i % 2 === 0 ? "Pro" : "Basic",
+    status: i % 3 === 0 ? "Inactive" : "Active",
+  })),
 ];
 
 const subscriptionPlans = [
@@ -33,11 +49,15 @@ const subscriptionPlans = [
   { id: 2, name: "Pro", price: "$29.99/mo", features: ["Advanced Analytics", "Unlimited Reports", "Priority Support"] },
 ];
 
+const ITEMS_PER_PAGE = 5;
+
 const Admin = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [planFilter, setPlanFilter] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Filter users based on search term and filters
   const filteredUsers = users.filter((user) => {
@@ -46,6 +66,37 @@ const Admin = () => {
     const matchesPlan = planFilter === "all" || user.plan === planFilter;
     return matchesSearch && matchesStatus && matchesPlan;
   });
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredUsers.length / ITEMS_PER_PAGE);
+  const paginatedUsers = filteredUsers.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  const handleUserAction = (action: string, userId: number) => {
+    switch (action) {
+      case "edit":
+        toast({
+          title: "Edit User",
+          description: `Editing user ${userId}`,
+        });
+        break;
+      case "delete":
+        toast({
+          title: "Delete User",
+          description: `Deleting user ${userId}`,
+          variant: "destructive",
+        });
+        break;
+      case "toggle-status":
+        toast({
+          title: "Status Updated",
+          description: `User ${userId} status toggled`,
+        });
+        break;
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-spotify-darker via-[#1a2c1a] to-spotify-darker text-white p-8">
@@ -130,10 +181,11 @@ const Admin = () => {
                   <TableHead className="text-white">Email</TableHead>
                   <TableHead className="text-white">Plan</TableHead>
                   <TableHead className="text-white">Status</TableHead>
+                  <TableHead className="text-white text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredUsers.map((user) => (
+                {paginatedUsers.map((user) => (
                   <TableRow key={user.id} className="hover:bg-black/20">
                     <TableCell className="text-gray-300">{user.email}</TableCell>
                     <TableCell className="text-gray-300">{user.plan}</TableCell>
@@ -144,10 +196,99 @@ const Admin = () => {
                         {user.status}
                       </span>
                     </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex justify-end gap-2">
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => handleUserAction("edit", user.id)}
+                              >
+                                <Edit2 className="h-4 w-4" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Edit user</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => handleUserAction("toggle-status", user.id)}
+                              >
+                                {user.status === "Active" ? (
+                                  <UserX className="h-4 w-4" />
+                                ) : (
+                                  <UserCheck className="h-4 w-4" />
+                                )}
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>{user.status === "Active" ? "Deactivate" : "Activate"} user</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => handleUserAction("delete", user.id)}
+                              >
+                                <Trash2 className="h-4 w-4 text-red-400" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Delete user</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
+            
+            {totalPages > 1 && (
+              <div className="mt-4">
+                <Pagination>
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious
+                        onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                        className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                      />
+                    </PaginationItem>
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                      <PaginationItem key={page}>
+                        <PaginationLink
+                          onClick={() => setCurrentPage(page)}
+                          isActive={currentPage === page}
+                        >
+                          {page}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+                    <PaginationItem>
+                      <PaginationNext
+                        onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                        className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              </div>
+            )}
           </Card>
         </div>
       </div>
