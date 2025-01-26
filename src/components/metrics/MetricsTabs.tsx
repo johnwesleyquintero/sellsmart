@@ -1,6 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MetricsTable } from "./MetricsTable";
+import { CampaignAnalysis } from "./CampaignAnalysis";
+import { KeywordAnalysis } from "./KeywordAnalysis";
 
 interface MetricsTabsProps {
   weeklyMetrics: Array<any>;
@@ -18,6 +20,8 @@ export function MetricsTabs({ weeklyMetrics, monthlyMetrics, detailedMetrics }: 
       <TabsList>
         <TabsTrigger value="weekly">Weekly Analysis</TabsTrigger>
         <TabsTrigger value="monthly">Monthly Analysis</TabsTrigger>
+        <TabsTrigger value="campaigns">Campaign Analysis</TabsTrigger>
+        <TabsTrigger value="keywords">Keyword Analysis</TabsTrigger>
         <TabsTrigger value="asin">ASIN Analysis</TabsTrigger>
         <TabsTrigger value="search">Search Terms</TabsTrigger>
         <TabsTrigger value="sku">SKU Analysis</TabsTrigger>
@@ -65,6 +69,14 @@ export function MetricsTabs({ weeklyMetrics, monthlyMetrics, detailedMetrics }: 
             />
           </CardContent>
         </Card>
+      </TabsContent>
+
+      <TabsContent value="campaigns">
+        <CampaignAnalysis data={detailedMetrics.asinMetrics} />
+      </TabsContent>
+
+      <TabsContent value="keywords">
+        <KeywordAnalysis data={detailedMetrics.searchTermMetrics} />
       </TabsContent>
 
       <TabsContent value="asin">

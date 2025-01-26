@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import Papa from "papaparse";
 import {
   Card,
@@ -14,22 +14,60 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Upload, FileSpreadsheet, Table } from "lucide-react";
 import { calculateMetrics } from "@/utils/amazonMetrics";
 import { AmazonMetricsDisplay } from "./AmazonMetricsDisplay";
+import { supabase } from "@/integrations/supabase/client";
 
 export function DataImport() {
   const [importedData, setImportedData] = useState<any[]>([]);
   const [metrics, setMetrics] = useState<any>(null);
+  const [isUploading, setIsUploading] = useState(false);
   const { toast } = useToast();
 
-  const processData = (data: any[]) => {
-    setImportedData(data);
-    const calculatedMetrics = calculateMetrics(data);
-    setMetrics(calculatedMetrics);
-    
-    toast({
-      title: "Data processed successfully",
-      description: `${data.length} rows processed with metrics calculated`,
-    });
-    console.log("Processed metrics:", calculatedMetrics);
+  const processAndUploadData = async (data: any[]) => {
+    try {
+      setIsUploading(true);
+      
+      // Transform data to match database schema
+      const transformedData = data.map(row => ({
+        date: row.Date,
+        impressions: parseInt(row.Impressions) || 0,
+        clicks: parseInt(row.Clicks) || 0,
+        amount_spent: parseFloat(row.Spend?.replace('$', '').replace(',', '')) || 0,
+        total_ad_sales: parseFloat(row["Total Sales"]?.replace('$', '').replace(',', '')) || 0,
+        total_ad_orders: parseInt(row.Orders) || 0,
+        campaign_name: row["Campaign Name"],
+        ad_group_name: row["Ad Group Name"],
+        advertised_asin: row["Advertised ASIN"],
+        advertised_sku: row["Advertised SKU"],
+        keyword: row.Keyword,
+        search_term: row["Search Term"]
+      }));
+
+      // Upload to Supabase
+      const { error } = await supabase
+        .from('amazon_ads_metrics')
+        .insert(transformedData);
+
+      if (error) throw error;
+
+      // Update local state
+      setImportedData(data);
+      const calculatedMetrics = calculateMetrics(data);
+      setMetrics(calculatedMetrics);
+      
+      toast({
+        title: "Data imported successfully",
+        description: `${data.length} rows processed and uploaded`,
+      });
+    } catch (error: any) {
+      console.error("Import error:", error);
+      toast({
+        title: "Import failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const handleCSVUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,7 +75,7 @@ export function DataImport() {
     if (file) {
       Papa.parse(file, {
         complete: (results) => {
-          processData(results.data);
+          processAndUploadData(results.data);
         },
         header: true,
         skipEmptyLines: true,
@@ -62,7 +100,7 @@ export function DataImport() {
       .then(response => response.text())
       .then(data => {
         const results = Papa.parse(data, { header: true });
-        processData(results.data);
+        processAndUploadData(results.data);
       })
       .catch(error => {
         toast({
@@ -95,14 +133,20 @@ export function DataImport() {
                 <div className="flex items-center justify-center w-full">
                   <label
                     htmlFor="csv-upload"
-                    className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-600 border-dashed rounded-lg cursor-pointer hover:bg-spotify-darker/50"
+                    className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-600 border-dashed rounded-lg cursor-pointer hover:bg-spotify-darker/50 relative"
                   >
                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                      <FileSpreadsheet className="w-8 h-8 mb-2 text-gray-400" />
-                      <p className="mb-2 text-sm text-gray-400">
-                        <span className="font-semibold">Click to upload</span> or drag and drop
-                      </p>
-                      <p className="text-xs text-gray-400">CSV files only</p>
+                      {isUploading ? (
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+                      ) : (
+                        <>
+                          <FileSpreadsheet className="w-8 h-8 mb-2 text-gray-400" />
+                          <p className="mb-2 text-sm text-gray-400">
+                            <span className="font-semibold">Click to upload</span> or drag and drop
+                          </p>
+                          <p className="text-xs text-gray-400">CSV files only</p>
+                        </>
+                      )}
                     </div>
                     <Input
                       id="csv-upload"
@@ -110,6 +154,7 @@ export function DataImport() {
                       accept=".csv"
                       className="hidden"
                       onChange={handleCSVUpload}
+                      disabled={isUploading}
                     />
                   </label>
                 </div>
@@ -127,8 +172,9 @@ export function DataImport() {
                       const url = e.target.value;
                       if (url) handleGoogleSheetImport(url);
                     }}
+                    disabled={isUploading}
                   />
-                  <Button variant="secondary">
+                  <Button variant="secondary" disabled={isUploading}>
                     <Table className="w-4 h-4 mr-2" />
                     Import
                   </Button>
