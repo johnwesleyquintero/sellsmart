@@ -1,21 +1,26 @@
-import { Home, BarChart2, Target, History, Database, Download } from "lucide-react";
+import { Home, BarChart2, Target, History, Database, Download, FileInput } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
-  SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarGroupContent,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
-const items = [
-  { title: "Overview", icon: Home, url: "#" },
-  { title: "Insights", icon: BarChart2, url: "#" },
-  { title: "Targets & Search Terms", icon: Target, url: "#" },
-  { title: "History", icon: History, url: "#" },
-  { title: "DSP", icon: Database, url: "#" },
+const analyticItems = [
+  { title: "Overview", icon: Home, url: "/dashboard" },
+  { title: "Insights", icon: BarChart2, url: "/dashboard/insights" },
+  { title: "Targets & Search Terms", icon: Target, url: "/dashboard/targets" },
+  { title: "History", icon: History, url: "/dashboard/history" },
+  { title: "DSP", icon: Database, url: "/dashboard/dsp" },
+];
+
+const dataSourceItems = [
+  { title: "Import Amazon Ads", icon: FileInput, url: "/dashboard/import" },
+  { title: "Download Reports", icon: Download, url: "/dashboard/reports" },
 ];
 
 export function DashboardSidebar() {
@@ -26,7 +31,7 @@ export function DashboardSidebar() {
           <SidebarGroupLabel>Analytics</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
+              {analyticItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <a href={item.url} className="flex items-center gap-2">
@@ -41,17 +46,19 @@ export function DashboardSidebar() {
         </SidebarGroup>
         
         <SidebarGroup className="mt-8">
-          <SidebarGroupLabel>Import Data</SidebarGroupLabel>
+          <SidebarGroupLabel>Data Sources</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <a href="#" className="flex items-center gap-2">
-                    <Download className="w-4 h-4" />
-                    <span>Download Reports</span>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              {dataSourceItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <a href={item.url} className="flex items-center gap-2">
+                      <item.icon className="w-4 h-4" />
+                      <span>{item.title}</span>
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

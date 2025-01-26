@@ -7,17 +7,35 @@ import { Button } from "@/components/ui/button";
 import { CampaignPerformanceChart } from "@/components/metrics/CampaignPerformanceChart";
 import { SearchTermAnalysis } from "@/components/metrics/SearchTermAnalysis";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { AmazonMetricsDisplay } from "@/components/AmazonMetricsDisplay";
+import { calculateMetrics } from "@/utils/amazonMetrics";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const Dashboard = () => {
-  const [metrics, setMetrics] = useState<any>(null);
+  const [dateRange, setDateRange] = useState("14");
+  
+  // Fetch metrics data from Supabase
+  const { data: metricsData, isLoading } = useQuery({
+    queryKey: ['metrics', dateRange],
+    queryFn: async () => {
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - parseInt(dateRange));
+      
+      const { data, error } = await supabase
+        .from('amazon_ads_metrics')
+        .select('*')
+        .gte('date', startDate.toISOString().split('T')[0])
+        .order('date', { ascending: true });
+        
+      if (error) throw error;
+      return calculateMetrics(data || []);
+    }
+  });
 
-  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log("Search submitted");
-  };
-
-  const handleDateRangeChange = (range: string) => {
-    console.log("Date range changed:", range);
+  const handleDateRangeChange = (value: string) => {
+    setDateRange(value);
   };
 
   return (
@@ -33,7 +51,7 @@ const Dashboard = () => {
               </div>
               
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full md:w-auto">
-                <form onSubmit={handleSearch} className="flex gap-2">
+                <form className="flex gap-2">
                   <Input
                     type="search"
                     placeholder="Search campaigns..."
@@ -44,29 +62,34 @@ const Dashboard = () => {
                   </Button>
                 </form>
                 
-                <select 
-                  className="bg-spotify-light border border-gray-700 rounded-md px-3 py-2 text-sm"
-                  onChange={(e) => handleDateRangeChange(e.target.value)}
+                <Select
+                  value={dateRange}
+                  onValueChange={handleDateRangeChange}
                 >
-                  <option value="7">Last 7 days</option>
-                  <option value="14" selected>Last 14 days</option>
-                  <option value="30">Last 30 days</option>
-                  <option value="90">Last 90 days</option>
-                </select>
+                  <SelectTrigger className="w-[180px] bg-spotify-light border-gray-700">
+                    <SelectValue placeholder="Select time range" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="7">Last 7 days</SelectItem>
+                    <SelectItem value="14">Last 14 days</SelectItem>
+                    <SelectItem value="30">Last 30 days</SelectItem>
+                    <SelectItem value="90">Last 90 days</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
-            <div className="mb-8">
-              <DataImport />
-            </div>
-
-            {metrics && (
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                <div className="lg:col-span-2">
-                  <CampaignPerformanceChart data={metrics.weeklyMetrics} />
-                </div>
-                <div>
-                  <SearchTermAnalysis data={metrics.detailedMetrics.searchTermMetrics} />
+            {isLoading ? (
+              <div className="flex items-center justify-center h-64">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+              </div>
+            ) : metricsData ? (
+              <AmazonMetricsDisplay metrics={metricsData} />
+            ) : (
+              <div className="text-center py-8">
+                <p>No data available. Import your Amazon Ads data to get started.</p>
+                <div className="mt-4">
+                  <DataImport />
                 </div>
               </div>
             )}
