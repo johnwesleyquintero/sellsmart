@@ -62,7 +62,7 @@ AdVantage Platform 🎯
 
 markdown
 
-Copy
+```
 
 - **Campaign Management**
   - Real-time SP/SD/SB campaign performance
@@ -97,7 +97,7 @@ Copy
 
 markdown
 
-Copy
+```
 
 - **Multi-Client Monitoring**
   - Aggregate performance across all managed accounts
@@ -131,7 +131,7 @@ Copy
 
 typescript
 
-Copy
+```
 
 // Sample Amazon Ads API Service
 class AmazonAdsService {
@@ -146,9 +146,9 @@ class AmazonAdsService {
     return await amazonML.generateBidSuggestions();
   }
 }
-
+```
 ### Key Features Matrix
-
+```
 | Module | Must-Have Features | Spotify UI Elements |
 | --- | --- | --- |
 | Campaign Mgmt | Real-time bid adjustments, Automated rules | Wrapped-style annual reports |
@@ -157,7 +157,7 @@ class AmazonAdsService {
 | Admin | Multi-account control, API monitoring | Album grid-style client overview |
 
 * * * * *
-
+```
 🚀 Suggested Tech Stack
 -----------------------
 
