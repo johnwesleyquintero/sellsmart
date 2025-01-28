@@ -26,6 +26,13 @@ export function DataImport() {
     try {
       setIsUploading(true);
       
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        throw new Error("You must be logged in to upload data");
+      }
+      
       // Transform data to match database schema
       const transformedData = data.map(row => ({
         date: row.Date,
@@ -39,7 +46,8 @@ export function DataImport() {
         advertised_asin: row["Advertised ASIN"],
         advertised_sku: row["Advertised SKU"],
         keyword: row.Keyword,
-        search_term: row["Search Term"]
+        search_term: row["Search Term"],
+        account_id: user.id // Add the user's ID as account_id
       }));
 
       // Upload to Supabase
