@@ -47,7 +47,7 @@ export function DataImport() {
         advertised_sku: row["Advertised SKU"],
         keyword: row.Keyword,
         search_term: row["Search Term"],
-        account_id: user.id // Add the user's ID as account_id
+        account_id: user.id
       }));
 
       // Upload to Supabase
@@ -58,13 +58,13 @@ export function DataImport() {
       if (error) throw error;
 
       // Update local state
-      setImportedData(data);
-      const calculatedMetrics = calculateMetrics(data);
+      setImportedData(transformedData);
+      const calculatedMetrics = calculateMetrics(transformedData);
       setMetrics(calculatedMetrics);
       
       toast({
         title: "Data imported successfully",
-        description: `${data.length} rows processed and uploaded`,
+        description: `${transformedData.length} rows processed and uploaded`,
       });
     } catch (error: any) {
       console.error("Import error:", error);
