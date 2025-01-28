@@ -40,14 +40,14 @@ const Dashboard = () => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-gradient-to-br from-spotify-darker via-[#1a2c1a] to-spotify-darker text-white">
+      <div className="min-h-screen flex w-full bg-white">
         <DashboardSidebar />
         <main className="flex-1 p-8">
           <div className="max-w-7xl mx-auto">
             <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
               <div>
-                <h1 className="text-2xl font-bold">Overview</h1>
-                <p className="text-gray-400 text-sm mt-1">Track your advertising performance</p>
+                <h1 className="text-2xl font-bold text-gray-900">Overview</h1>
+                <p className="text-gray-500 text-sm mt-1">Track your advertising performance</p>
               </div>
               
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full md:w-auto">
@@ -55,7 +55,7 @@ const Dashboard = () => {
                   <Input
                     type="search"
                     placeholder="Search campaigns..."
-                    className="max-w-[300px] bg-spotify-light border-gray-700"
+                    className="max-w-[300px] border-gray-300"
                   />
                   <Button type="submit" size="icon" variant="secondary">
                     <Search className="h-4 w-4" />
@@ -66,7 +66,7 @@ const Dashboard = () => {
                   value={dateRange}
                   onValueChange={handleDateRangeChange}
                 >
-                  <SelectTrigger className="w-[180px] bg-spotify-light border-gray-700">
+                  <SelectTrigger className="w-[180px] border-gray-300">
                     <SelectValue placeholder="Select time range" />
                   </SelectTrigger>
                   <SelectContent>
@@ -81,13 +81,13 @@ const Dashboard = () => {
 
             {isLoading ? (
               <div className="flex items-center justify-center h-64">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
               </div>
             ) : metricsData ? (
               <AmazonMetricsDisplay metrics={metricsData} />
             ) : (
               <div className="text-center py-8">
-                <p>No data available. Import your Amazon Ads data to get started.</p>
+                <p className="text-gray-600">No data available. Import your Amazon Ads data to get started.</p>
                 <div className="mt-4">
                   <DataImport />
                 </div>

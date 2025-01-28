@@ -9,6 +9,12 @@ import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
+import DashboardInsights from "./pages/DashboardInsights";
+import DashboardTargets from "./pages/DashboardTargets";
+import DashboardHistory from "./pages/DashboardHistory";
+import DashboardDSP from "./pages/DashboardDSP";
+import DashboardImport from "./pages/DashboardImport";
+import DashboardReports from "./pages/DashboardReports";
 import Admin from "./pages/Admin";
 
 const queryClient = new QueryClient({
@@ -68,6 +74,54 @@ const App = () => {
                   element={
                     <ProtectedRoute>
                       <Dashboard />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/dashboard/insights"
+                  element={
+                    <ProtectedRoute>
+                      <DashboardInsights />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/dashboard/targets"
+                  element={
+                    <ProtectedRoute>
+                      <DashboardTargets />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/dashboard/history"
+                  element={
+                    <ProtectedRoute>
+                      <DashboardHistory />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/dashboard/dsp"
+                  element={
+                    <ProtectedRoute>
+                      <DashboardDSP />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/dashboard/import"
+                  element={
+                    <ProtectedRoute>
+                      <DashboardImport />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/dashboard/reports"
+                  element={
+                    <ProtectedRoute>
+                      <DashboardReports />
                     </ProtectedRoute>
                   }
                 />
