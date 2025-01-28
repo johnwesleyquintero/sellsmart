@@ -3,7 +3,7 @@
 SellSmart 🎯
 =====================
 
-*Amazon Ads Management Suite with Spotify Design Sensibilities*
+*owerful analytics dashboard for monitoring and optimizing your Amazon advertising performance. Get started today and unlock the potential of your data.*
 
 ![Platform Overview](https://via.placeholder.com/1920x800.png?text=AdVantage+Platform+Preview)
 
