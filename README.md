@@ -1,6 +1,6 @@
 * * * * *
 
-AdVantage Platform 🎯
+SellSmart 🎯
 =====================
 
 *Amazon Ads Management Suite with Spotify Design Sensibilities*
@@ -253,3 +253,229 @@ class AmazonAdsService {
     -   Dark Theme Contrast Checks
 
     -   Cross-account Permission Validation
+
+
+public/
+├── assets/
+│   ├── fonts/          # Custom fonts (Spotify Circular, Gotham, etc.)
+│   ├── images/
+│   │   ├── amazon-ads/ # Amazon product/ads related images
+│   │   └── spotify-ui/ # Spotify-style UI elements
+│   └── svgs/           # SVG icons/components
+├── locales/            # i18n files
+└── error-pages/        # Custom 404, 500 pages (Spotify-style)
+
+src/
+├── app/                # Main app configuration
+│   ├── routers/        # React router configuration
+│   └── providers/      # Context providers (Theme, Auth, etc.)
+│
+├── common/
+│   ├── api/
+│   │   ├── amazon-ads/ # Amazon Advertising API client
+│   │   └── supabase/   # Supabase client extensions
+│   ├── constants/      # App-wide constants
+│   └── types/          # TypeScript types/interfaces
+│
+├── features/
+│   ├── auth/           # Authentication flow
+│   │   ├── components/ # Login/Register components
+│   │   ├── hooks/      # Auth hooks
+│   │   └── utils/      # Auth utilities
+│   │
+│   ├── dashboard/      # User dashboard
+│   │   ├── components/ # Dashboard-specific components
+│   │   ├── hooks/      # Dashboard data hooks
+│   │   └── widgets/    # Reusable dashboard widgets
+│   │
+│   ├── admin/          # Admin dashboard
+│   │   ├── components/ # Admin-specific components
+│   │   └── panels/     # Admin control panels
+│   │
+│   └── campaigns/      # Amazon Ads campaigns feature
+│       ├── api/        # Campaign API calls
+│       ├── analysis/   # Performance analysis components
+│       └── types/      # Campaign-related types
+│
+├── layouts/            # Page layouts
+│   ├── MainLayout/     # Primary app layout
+│   ├── AuthLayout/     # Authentication flow layout
+│   └── AdminLayout/    # Admin dashboard layout
+│
+├── theme/              # Spotify-inspired theme
+│   ├── components/     # Styled system components
+│   ├── tokens/         # Design tokens (colors, typography)
+│   └── utils/          # Theme utilities
+│
+├── utils/
+│   ├── amazon-ads/     # Amazon Ads specific utilities
+│   ├── formatting/     # Data formatting helpers
+│   └── validation/     # Validation utilities
+│
+└── __tests__/          # Test directory
+    ├── unit/           # Unit tests
+    └── integration/    # Integration tests
+
+Key Enhancements and Rationale:
+
+1.  **Amazon Ads Integration**
+
+bash
+
+Copy
+
+src/features/campaigns/
+├── api/
+│   ├── sponsored-products.ts
+│   ├── sponsored-brands.ts
+│   └── sponsored-display.ts
+└── analysis/
+    ├── acos-calculator.tsx
+    └── bid-optimizer.tsx
+
+1.  **Spotify-inspired Theme System**
+
+typescript
+
+Copy
+
+// src/theme/tokens/colors.ts
+export const spotifyTheme = {
+  dark: {
+    background: '#121212',
+    surface: '#181818',
+    primary: '#1DB954',
+    secondary: '#535353'
+  },
+  // ...light theme variations
+}
+
+1.  **Supabase Auth Enhancements**
+
+typescript
+
+Copy
+
+// src/features/auth/api/supabase.auth.ts
+export const authAPI = {
+  loginWithSpotify: async () => {
+    return await supabase.auth.signInWithOAuth({
+      provider: 'spotify',
+      options: { scopes: 'user-read-email' }
+    })
+  },
+  // Amazon Seller OAuth integration
+  loginWithAmazon: async () => {
+    /* ... */
+  }
+}
+
+1.  **Performance Monitoring**
+
+bash
+
+Copy
+
+src/common/api/performance/
+├── realtime-metrics.ts  # Amazon Ads real-time metrics
+└── historical-data.ts   # Long-term trend analysis
+
+1.  **Suggested New Dependencies**
+
+json
+
+Copy
+
+{
+  "dependencies": {
+    "@amazon-ads/amazon-ads-api": "^2.4.0",
+    "react-query": "^3.39.3",
+    "recharts": "^2.8.0",
+    "zod": "^3.22.4",
+    "storybook-addon-spotify-theme": "^1.2.0"
+  }
+}
+
+Critical Implementation Steps:
+
+1.  **Amazon Ads API Integration**
+
+typescript
+
+Copy
+
+// src/common/api/amazon-ads/client.ts
+export const amazonAdsClient = createClient({
+  baseURL: import.meta.env.VITE_AMAZON_API_URL,
+  headers: {
+    'Amazon-Advertising-API-ClientId': import.meta.env.VITE_AMAZON_CLIENT_ID,
+    'Authorization': `Bearer ${getAccessToken()}`
+  }
+});
+
+1.  **Spotify UI Components**
+
+tsx
+
+Copy
+
+// src/theme/components/NowPlayingCard.tsx
+const NowPlayingCard = ({ metric }: { metric: CampaignMetric }) => (
+  <div className="spotify-now-playing">  <WaveformVisualizer />  <MetricDisplay value={metric.value} trend={metric.trend} />  </div>
+);
+
+1.  **Feature Flagging for Admin**
+
+typescript
+
+Copy
+
+// src/features/admin/utils/featureFlags.ts
+export const ADMIN_FEATURES = {
+  BULK_ACTIONS: process.env.NODE_ENV === 'development',
+  ADVANCED_REPORTING: false
+};
+
+1.  **Performance Optimization**
+
+javascript
+
+Copy
+
+// vite.config.ts
+export default defineConfig({
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          amazon: ['@amazon-ads/amazon-ads-api'],
+          spotifyUI: ['storybook-addon-spotify-theme']
+        }
+      }
+    }
+  }
+});
+
+Recommended File Additions:
+
+1.  `src/theme/spotify.d.ts` - Spotify design token types
+
+2.  `src/common/api/amazon-ads/types.ts` - Amazon Ads API types
+
+3.  `src/features/dashboard/widgets/CampaignHealth.tsx` - Amazon Ads health monitor
+
+4.  `.env.example` - Environment template
+
+5.  `src/utils/spotifyThemeValidator.ts` - Theme validation
+
+This structure improves:
+
+-   **Separation of Concerns**: Clear feature boundaries
+
+-   **Scalability**: Easy addition of new advertising platforms
+
+-   **Maintainability**: Type-safe API interactions
+
+-   **Performance**: Code splitting for Amazon/Spotify features
+
+-   **Consistency**: Centralized design system implementation
