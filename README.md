@@ -254,7 +254,7 @@ class AmazonAdsService {
 
     -   Cross-account Permission Validation
 
-
+```
 public/
 ├── assets/
 │   ├── fonts/          # Custom fonts (Spotify Circular, Gotham, etc.)
@@ -315,7 +315,7 @@ src/
 └── __tests__/          # Test directory
     ├── unit/           # Unit tests
     └── integration/    # Integration tests
-
+```
 Key Enhancements and Rationale:
 
 1.  **Amazon Ads Integration**
@@ -323,6 +323,7 @@ Key Enhancements and Rationale:
 bash
 
 * * * * *
+```
 
 src/features/campaigns/
 ├── api/
@@ -332,13 +333,13 @@ src/features/campaigns/
 └── analysis/
     ├── acos-calculator.tsx
     └── bid-optimizer.tsx
-
+```
 1.  **Spotify-inspired Theme System**
 
 typescript
 
 * * * * *
-
+```
 // src/theme/tokens/colors.ts
 export const spotifyTheme = {
   dark: {
@@ -350,12 +351,13 @@ export const spotifyTheme = {
   // ...light theme variations
 }
 
-1.  **Supabase Auth Enhancements**
 
+1.  **Supabase Auth Enhancements**
+```
 typescript
 
 * * * * *
-
+```
 // src/features/auth/api/supabase.auth.ts
 export const authAPI = {
   loginWithSpotify: async () => {
@@ -369,23 +371,28 @@ export const authAPI = {
     /* ... */
   }
 }
+```
+
+
 
 1.  **Performance Monitoring**
 
 bash
 
 * * * * *
-
+```
 src/common/api/performance/
 ├── realtime-metrics.ts  # Amazon Ads real-time metrics
 └── historical-data.ts   # Long-term trend analysis
 
+```
 1.  **Suggested New Dependencies**
 
 json
 
 * * * * *
 
+```
 {
   "dependencies": {
     "@amazon-ads/amazon-ads-api": "^2.4.0",
@@ -395,7 +402,7 @@ json
     "storybook-addon-spotify-theme": "^1.2.0"
   }
 }
-
+```
 Critical Implementation Steps:
 
 1.  **Amazon Ads API Integration**
@@ -403,7 +410,7 @@ Critical Implementation Steps:
 typescript
 
 * * * * *
-
+```
 // src/common/api/amazon-ads/client.ts
 export const amazonAdsClient = createClient({
   baseURL: import.meta.env.VITE_AMAZON_API_URL,
@@ -412,36 +419,36 @@ export const amazonAdsClient = createClient({
     'Authorization': `Bearer ${getAccessToken()}`
   }
 });
-
+```
 1.  **Spotify UI Components**
 
 tsx
 
 * * * * *
-
+```
 // src/theme/components/NowPlayingCard.tsx
 const NowPlayingCard = ({ metric }: { metric: CampaignMetric }) => (
   <div className="spotify-now-playing">  <WaveformVisualizer />  <MetricDisplay value={metric.value} trend={metric.trend} />  </div>
 );
-
+```
 1.  **Feature Flagging for Admin**
 
 typescript
 
 * * * * *
-
+```
 // src/features/admin/utils/featureFlags.ts
 export const ADMIN_FEATURES = {
   BULK_ACTIONS: process.env.NODE_ENV === 'development',
   ADVANCED_REPORTING: false
 };
-
+```
 1.  **Performance Optimization**
 
 javascript
 
 * * * * *
-
+```
 // vite.config.ts
 export default defineConfig({
   build: {
@@ -455,7 +462,7 @@ export default defineConfig({
     }
   }
 });
-
+```
 Recommended File Additions:
 
 1.  `src/theme/spotify.d.ts` - Spotify design token types
@@ -497,7 +504,7 @@ Phase 1: Foundation Setup (Weeks 1-2)
 markdown
 
 * * * * *
-
+```
 1. **Project Architecture**
    - [ ] Implement feature-based directory structure
    - [ ] Configure absolute path aliases
@@ -512,7 +519,7 @@ markdown
    - [ ] Supabase auth configuration
    - [ ] Amazon Ads API client setup
    - [ ] Error tracking (Sentry/Supabase Logs)
-
+```
 ### **Milestone Deliverables**
 
 ✅ Initial Spotify theme implementation\
@@ -521,7 +528,7 @@ markdown
 
 * * * * *
 
-Phase 2: Core Features Implementation (Weeks 3-6)
+Phase 2: Core Features Implementation
 -------------------------------------------------
 
 ### **Essential Pages & Flows**
@@ -529,7 +536,7 @@ Phase 2: Core Features Implementation (Weeks 3-6)
 markdown
 
 * * * * *
-
+```
 1. **Landing Page (Week 3)**
    - [ ] Hero section with animated metrics
    - [ ] Interactive demo panel
@@ -544,13 +551,13 @@ markdown
    - [ ] Campaign management table
    - [ ] Real-time performance widgets
    - [ ] AI-powered suggestion system
-
+```
 ### **Amazon Ads Features**
 
 typescript
 
 * * * * *
-
+```
 // Sample Feature Implementation
 const CampaignManager = () => {
   const { data } = useAmazonCampaigns();
@@ -566,10 +573,10 @@ const CampaignManager = () => {
     </SpotifyTable>
   );
 }
-
+```
 * * * * *
 
-Phase 3: Advanced Features (Weeks 7-9)
+Phase 3: Advanced Features
 --------------------------------------
 
 ### **Key Functionality Development**
@@ -577,7 +584,7 @@ Phase 3: Advanced Features (Weeks 7-9)
 markdown
 
 * * * * *
-
+```
 1. **AI-Powered Features**
    - [ ] Bid optimization suggestions
    - [ ] Ad * * * * * generator
@@ -592,21 +599,21 @@ markdown
    - [ ] Custom report builder
    - [ ] Historical trend analysis
    - [ ] Competitor benchmarking
-
+```
 ### **Performance Enhancements**
 
 bash
 
 * * * * *
-
+```
 # Example Optimization Task
 - Implement virtualized campaign lists
 - Add Suspense boundaries for lazy loading
 - Configure React Query caching strategies
-
+```
 * * * * *
 
-Phase 4: Performance & Optimization (Weeks 10-11)
+Phase 4: Performance & Optimization
 -------------------------------------------------
 
 ### **Critical Improvements**
@@ -614,7 +621,7 @@ Phase 4: Performance & Optimization (Weeks 10-11)
 markdown
 
 * * * * *
-
+```
 1. **Speed Enhancements**
    - [ ] Amazon API response caching
    - [ ] Bundle size optimization
@@ -629,10 +636,10 @@ markdown
    - [ ] Role-based access control
    - [ ] API rate limiting
    - [ ] Data encryption audit
-
+```
 * * * * *
 
-Phase 5: Maintenance & Scaling (Week 12+)
+Phase 5: Maintenance & Scaling
 -----------------------------------------
 
 ### **Long-Term Strategy**
@@ -640,7 +647,7 @@ Phase 5: Maintenance & Scaling (Week 12+)
 markdown
 
 * * * * *
-
+```
 1. **Monitoring**
    - [ ] Set up performance metrics dashboard
    - [ ] Configure error tracking alerts
@@ -655,19 +662,19 @@ markdown
    - [ ] Load testing setup
    - [ ] Horizontal scaling plan
    - [ ] Multi-region deployment config
-
+```
 * * * * *
 
 🚦 Key Milestones
 -----------------
-
+```
 | Milestone | Deadline | Success Metrics |
 | --- | --- | --- |
 | Private Beta Launch | Week 6 | 50+ test campaigns created |
 | Public Launch | Week 12 | 100 active users, <2s load time |
 | Mobile Adaptation | Week 16 | 30% mobile traffic adoption |
 | Enterprise Features | Week 20 | 5+ team accounts managed |
-
+```
 * * * * *
 
 🔧 Technical Requirements
@@ -690,14 +697,14 @@ markdown
 json
 
 * * * * *
-
+```
 "criticalDependencies": {
   "amazon-ads-sdk": "^3.2.1",
   "spotify-design-tokens": "^2.0.0",
   "react-aria": "^3.25.0",
   "recharts": "^2.8.0"
 }
-
+```
 * * * * *
 
 ⚠️ Risk Mitigation
