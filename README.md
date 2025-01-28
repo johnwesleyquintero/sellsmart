@@ -1,53 +1,69 @@
+* * * * *
 
 AdVantage Platform 🎯
-Amazon Ads Management Suite with Spotify Design Sensibilities
+=====================
 
-Platform Overview
+*Amazon Ads Management Suite with Spotify Design Sensibilities*
+
+![Platform Overview](https://via.placeholder.com/1920x800.png?text=AdVantage+Platform+Preview)
+
+* * * * *
 
 🌐 Application Structure
-1. Landing Page (Public)
-Spotify-inspired Features:
+------------------------
 
-Dark theme with gradient overlays
+### 1\. **Landing Page** (Public)
 
-Animated "Now Playing" style metrics ticker
+**Spotify-inspired Features:**
 
-Interactive demo panel with hover-activated previews
+-   Dark theme with gradient overlays
 
-Core Functionality:
+-   Animated "Now Playing" style metrics ticker
 
-Value proposition for Amazon sellers
+-   Interactive demo panel with hover-activated previews
 
-Integration status with Amazon Advertising API
+**Core Functionality:**
 
-Real-time platform metrics (campaigns managed, ROAS avg)
+-   Value proposition for Amazon sellers
 
-Social proof section with API badges
+-   Integration status with Amazon Advertising API
 
-2. Authentication Flow (Login/Register)
-Spotify-style Elements:
+-   Real-time platform metrics (campaigns managed, ROAS avg)
 
-Dark modal overlays with subtle gradients
+-   Social proof section with API badges
 
-Animated form transitions
+* * * * *
 
-Password strength meter with musical visual feedback
+### 2\. **Authentication Flow** (Login/Register)
 
-Key Features:
+**Spotify-style Elements:**
 
-Amazon Seller Central OAuth integration
+-   Dark modal overlays with subtle gradients
 
-2FA with "Verified" badge animation
+-   Animated form transitions
 
-Progressive profiling for new users
+-   Password strength meter with musical visual feedback
 
-Security audit log preview
+**Key Features:**
 
-3. User Dashboard (Seller Perspective)
-Amazon Ads Functionality:
+-   Amazon Seller Central OAuth integration
+
+-   2FA with "Verified" badge animation
+
+-   Progressive profiling for new users
+
+-   Security audit log preview
+
+* * * * *
+
+### 3\. **User Dashboard** (Seller Perspective)
+
+**Amazon Ads Functionality:**
 
 markdown
+
 Copy
+
 - **Campaign Management**
   - Real-time SP/SD/SB campaign performance
   - Automated rule suggestions (Spotify-style "Daily Mix" recommendations)
@@ -62,21 +78,27 @@ Copy
   - Customizable widgets (ACOS, TACoS, ROAS)
   - Historical performance timelines
   - Competitor benchmark comparisons
-UI Enhancements:
 
-Spotify Wrapped-style annual reports
+**UI Enhancements:**
 
-Drag-and-drop dashboard customization
+-   Spotify Wrapped-style annual reports
 
-"Now Playing" style active campaign card
+-   Drag-and-drop dashboard customization
 
-Collaborative playlist-inspired team features
+-   "Now Playing" style active campaign card
 
-4. Admin Dashboard (Enhanced)
-Advanced Amazon Ads Management:
+-   Collaborative playlist-inspired team features
+
+* * * * *
+
+### 4\. **Admin Dashboard** (Enhanced)
+
+**Advanced Amazon Ads Management:**
 
 markdown
+
 Copy
+
 - **Multi-Client Monitoring**
   - Aggregate performance across all managed accounts
   - Alert system for account health metrics
@@ -91,18 +113,26 @@ Copy
   - Client billing integration
   - Advertising spend reconciliation
   - Profitability calculators
-Spotify Admin Features:
 
-"Artist Analytics" style client performance views
+**Spotify Admin Features:**
 
-Team member permissions (Collaborator/Admin roles)
+-   "Artist Analytics" style client performance views
 
-Audit log with change tracking
+-   Team member permissions (Collaborator/Admin roles)
+
+-   Audit log with change tracking
+
+* * * * *
 
 🛠 Core Technical Requirements
-Amazon Ads API Integration
+------------------------------
+
+### Amazon Ads API Integration
+
 typescript
+
 Copy
+
 // Sample Amazon Ads API Service
 class AmazonAdsService {
   async getCampaignPerformance(campaignId: string): Promise<CampaignMetrics> {
@@ -111,95 +141,115 @@ class AmazonAdsService {
       metrics: ['impressions', 'clicks', 'spend', 'sales']
     });
   }
-  
+
   async generateRecommendations(): Promise<OptimizationTip[]> {
     return await amazonML.generateBidSuggestions();
   }
 }
-Key Features Matrix
-Module	Must-Have Features	Spotify UI Elements
-Campaign Mgmt	Real-time bid adjustments, Automated rules	Wrapped-style annual reports
-Creative Studio	Ad validation, AI suggestions	Lyrics-style text animation
-Analytics	Custom widgets, Export capabilities	Artist analytics-inspired visuals
-Admin	Multi-account control, API monitoring	Album grid-style client overview
+
+### Key Features Matrix
+
+| Module | Must-Have Features | Spotify UI Elements |
+| --- | --- | --- |
+| Campaign Mgmt | Real-time bid adjustments, Automated rules | Wrapped-style annual reports |
+| Creative Studio | Ad validation, AI suggestions | Lyrics-style text animation |
+| Analytics | Custom widgets, Export capabilities | Artist analytics-inspired visuals |
+| Admin | Multi-account control, API monitoring | Album grid-style client overview |
+
+* * * * *
+
 🚀 Suggested Tech Stack
-Frontend:
+-----------------------
 
-React 18 + TypeScript
+**Frontend:**
 
-Spotify UI Kit (Custom)
+-   React 18 + TypeScript
 
-Recharts/Visx for data visualization
+-   Spotify UI Kit (Custom)
 
-Amazon Ads UI Components
+-   Recharts/Visx for data visualization
 
-Backend:
+-   Amazon Ads UI Components
 
-Node.js + TypeScript
+**Backend:**
 
-Amazon Advertising API SDK
+-   Node.js + TypeScript
 
-Redis for rate limiting
+-   Amazon Advertising API SDK
 
-PostgreSQL for campaign data
+-   Redis for rate limiting
 
-DevOps:
+-   PostgreSQL for campaign data
 
-AWS ECS Fargate
+**DevOps:**
 
-Amazon API Gateway
+-   AWS ECS Fargate
 
-CloudWatch for API monitoring
+-   Amazon API Gateway
 
-CI/CD with CodePipeline
+-   CloudWatch for API monitoring
+
+-   CI/CD with CodePipeline
+
+* * * * *
 
 🔐 Security Requirements
-Amazon API Security:
+------------------------
 
-Token rotation implementation
+1.  **Amazon API Security:**
 
-AWS Secrets Manager integration
+    -   Token rotation implementation
 
-Scoped API permissions
+    -   AWS Secrets Manager integration
 
-Data Protection:
+    -   Scoped API permissions
 
-Campaign data encryption at rest
+2.  **Data Protection:**
 
-PCI-DSS compliance for payment processing
+    -   Campaign data encryption at rest
 
-SOC 2 audit trail
+    -   PCI-DSS compliance for payment processing
+
+    -   SOC 2 audit trail
+
+* * * * *
 
 📈 Key Performance Indicators
-Ad Platform Metrics:
+-----------------------------
 
-API Response Time < 800ms
+1.  **Ad Platform Metrics:**
 
-Real-time Data Refresh < 15s
+    -   API Response Time < 800ms
 
-Bulk Action Processing < 30s/100 campaigns
+    -   Real-time Data Refresh < 15s
 
-UI Performance:
+    -   Bulk Action Processing < 30s/100 campaigns
 
-LCP < 1.2s
+2.  **UI Performance:**
 
-INP < 200ms
+    -   LCP < 1.2s
 
-Dashboard Load Time < 2.5s
+    -   INP < 200ms
+
+    -   Dashboard Load Time < 2.5s
+
+* * * * *
 
 🧪 Testing Strategy
-Amazon API Simulation:
+-------------------
 
-Mock Server for Advertising API
+1.  **Amazon API Simulation:**
 
-Rate Limit Testing Suite
+    -   Mock Server for Advertising API
 
-SP/SD/SB Campaign Scenario Tests
+    -   Rate Limit Testing Suite
 
-UI Testing:
+    -   SP/SD/SB Campaign Scenario Tests
 
-Campaign Management Workflow Tests
+2.  **UI Testing:**
 
-Dark Theme Contrast Checks
+    -   Campaign Management Workflow Tests
 
-Cross-account Permission Validation
+    -   Dark Theme Contrast Checks
+
+    -   Cross-account Permission Validation
