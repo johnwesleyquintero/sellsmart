@@ -62,7 +62,7 @@ SellSmart 🎯
 
 markdown
 
-```
+* * * * *
 
 - **Campaign Management**
   - Real-time SP/SD/SB campaign performance
@@ -97,7 +97,7 @@ markdown
 
 markdown
 
-```
+* * * * *
 
 - **Multi-Client Monitoring**
   - Aggregate performance across all managed accounts
@@ -131,7 +131,7 @@ markdown
 
 typescript
 
-```
+* * * * *
 
 // Sample Amazon Ads API Service
 class AmazonAdsService {
@@ -146,9 +146,9 @@ class AmazonAdsService {
     return await amazonML.generateBidSuggestions();
   }
 }
-```
+* * * * *
 ### Key Features Matrix
-```
+* * * * *
 | Module | Must-Have Features | Spotify UI Elements |
 | --- | --- | --- |
 | Campaign Mgmt | Real-time bid adjustments, Automated rules | Wrapped-style annual reports |
@@ -157,7 +157,7 @@ class AmazonAdsService {
 | Admin | Multi-account control, API monitoring | Album grid-style client overview |
 
 * * * * *
-```
+* * * * *
 🚀 Suggested Tech Stack
 -----------------------
 
@@ -322,7 +322,7 @@ Key Enhancements and Rationale:
 
 bash
 
-Copy
+* * * * *
 
 src/features/campaigns/
 ├── api/
@@ -337,7 +337,7 @@ src/features/campaigns/
 
 typescript
 
-Copy
+* * * * *
 
 // src/theme/tokens/colors.ts
 export const spotifyTheme = {
@@ -354,7 +354,7 @@ export const spotifyTheme = {
 
 typescript
 
-Copy
+* * * * *
 
 // src/features/auth/api/supabase.auth.ts
 export const authAPI = {
@@ -374,7 +374,7 @@ export const authAPI = {
 
 bash
 
-Copy
+* * * * *
 
 src/common/api/performance/
 ├── realtime-metrics.ts  # Amazon Ads real-time metrics
@@ -384,7 +384,7 @@ src/common/api/performance/
 
 json
 
-Copy
+* * * * *
 
 {
   "dependencies": {
@@ -402,7 +402,7 @@ Critical Implementation Steps:
 
 typescript
 
-Copy
+* * * * *
 
 // src/common/api/amazon-ads/client.ts
 export const amazonAdsClient = createClient({
@@ -417,7 +417,7 @@ export const amazonAdsClient = createClient({
 
 tsx
 
-Copy
+* * * * *
 
 // src/theme/components/NowPlayingCard.tsx
 const NowPlayingCard = ({ metric }: { metric: CampaignMetric }) => (
@@ -428,7 +428,7 @@ const NowPlayingCard = ({ metric }: { metric: CampaignMetric }) => (
 
 typescript
 
-Copy
+* * * * *
 
 // src/features/admin/utils/featureFlags.ts
 export const ADMIN_FEATURES = {
@@ -440,7 +440,7 @@ export const ADMIN_FEATURES = {
 
 javascript
 
-Copy
+* * * * *
 
 // vite.config.ts
 export default defineConfig({
@@ -479,3 +479,269 @@ This structure improves:
 -   **Performance**: Code splitting for Amazon/Spotify features
 
 -   **Consistency**: Centralized design system implementation
+
+
+🛠 AdVantage Platform Development Roadmap
+=========================================
+
+**Version 1.0 - "Spotify Meets Amazon Ads"**\
+*Timeline: 12 Weeks | Team: 3-5 Developers*
+
+* * * * *
+
+Phase 1: Foundation Setup (Weeks 1-2)
+-------------------------------------
+
+### **Core Infrastructure**
+
+markdown
+
+* * * * *
+
+1. **Project Architecture**
+   - [ ] Implement feature-based directory structure
+   - [ ] Configure absolute path aliases
+   - [ ] Setup monorepo with Turborepo
+
+2. **Design System Setup**
+   - [ ] Create Spotify design tokens (colors, typography)
+   - [ ] Build Storybook with Spotify UI components
+   - [ ] Implement dark/light theme toggle
+
+3. **Initial Integrations**
+   - [ ] Supabase auth configuration
+   - [ ] Amazon Ads API client setup
+   - [ ] Error tracking (Sentry/Supabase Logs)
+
+### **Milestone Deliverables**
+
+✅ Initial Spotify theme implementation\
+✅ Basic auth flow with Supabase\
+✅ Amazon API connection prototype
+
+* * * * *
+
+Phase 2: Core Features Implementation (Weeks 3-6)
+-------------------------------------------------
+
+### **Essential Pages & Flows**
+
+markdown
+
+* * * * *
+
+1. **Landing Page (Week 3)**
+   - [ ] Hero section with animated metrics
+   - [ ] Interactive demo panel
+   - [ ] Social proof integration
+
+2. **Auth Flow (Week 4)**
+   - [ ] Spotify-style login/register modal
+   - [ ] Amazon Seller OAuth integration
+   - [ ] 2FA implementation
+
+3. **User Dashboard (Weeks 5-6)**
+   - [ ] Campaign management table
+   - [ ] Real-time performance widgets
+   - [ ] AI-powered suggestion system
+
+### **Amazon Ads Features**
+
+typescript
+
+* * * * *
+
+// Sample Feature Implementation
+const CampaignManager = () => {
+  const { data } = useAmazonCampaigns();
+  return (
+    <SpotifyTable>
+      {data.map(campaign => (
+        <CampaignRow
+          key={campaign.id}
+          {...campaign}
+          onEdit={openBidEditor}
+        />
+      ))}
+    </SpotifyTable>
+  );
+}
+
+* * * * *
+
+Phase 3: Advanced Features (Weeks 7-9)
+--------------------------------------
+
+### **Key Functionality Development**
+
+markdown
+
+* * * * *
+
+1. **AI-Powered Features**
+   - [ ] Bid optimization suggestions
+   - [ ] Ad * * * * * generator
+   - [ ] Anomaly detection
+
+2. **Collaboration System**
+   - [ ] Team permissions model
+   - [ ] Shared campaign workspaces
+   - [ ] Comment threads
+
+3. **Advanced Analytics**
+   - [ ] Custom report builder
+   - [ ] Historical trend analysis
+   - [ ] Competitor benchmarking
+
+### **Performance Enhancements**
+
+bash
+
+* * * * *
+
+# Example Optimization Task
+- Implement virtualized campaign lists
+- Add Suspense boundaries for lazy loading
+- Configure React Query caching strategies
+
+* * * * *
+
+Phase 4: Performance & Optimization (Weeks 10-11)
+-------------------------------------------------
+
+### **Critical Improvements**
+
+markdown
+
+* * * * *
+
+1. **Speed Enhancements**
+   - [ ] Amazon API response caching
+   - [ ] Bundle size optimization
+   - [ ] Lazy-loaded components
+
+2. **UI Polish**
+   - [ ] Motion design implementation
+   - [ ] Cross-browser testing
+   - [ ] Accessibility audit
+
+3. **Security Hardening**
+   - [ ] Role-based access control
+   - [ ] API rate limiting
+   - [ ] Data encryption audit
+
+* * * * *
+
+Phase 5: Maintenance & Scaling (Week 12+)
+-----------------------------------------
+
+### **Long-Term Strategy**
+
+markdown
+
+* * * * *
+
+1. **Monitoring**
+   - [ ] Set up performance metrics dashboard
+   - [ ] Configure error tracking alerts
+   - [ ] Implement usage analytics
+
+2. **Documentation**
+   - [ ] Create developer onboarding guide
+   - [ ] Write API integration docs
+   - [ ] Publish style guide
+
+3. **Scaling Prep**
+   - [ ] Load testing setup
+   - [ ] Horizontal scaling plan
+   - [ ] Multi-region deployment config
+
+* * * * *
+
+🚦 Key Milestones
+-----------------
+
+| Milestone | Deadline | Success Metrics |
+| --- | --- | --- |
+| Private Beta Launch | Week 6 | 50+ test campaigns created |
+| Public Launch | Week 12 | 100 active users, <2s load time |
+| Mobile Adaptation | Week 16 | 30% mobile traffic adoption |
+| Enterprise Features | Week 20 | 5+ team accounts managed |
+
+* * * * *
+
+🔧 Technical Requirements
+-------------------------
+
+**Core Stack:**
+
+-   React 18 + TypeScript
+
+-   Vite + SWC
+
+-   Supabase (Auth/DB)
+
+-   Amazon Advertising API
+
+-   Spotify Design System
+
+**Key Dependencies:**
+
+json
+
+* * * * *
+
+"criticalDependencies": {
+  "amazon-ads-sdk": "^3.2.1",
+  "spotify-design-tokens": "^2.0.0",
+  "react-aria": "^3.25.0",
+  "recharts": "^2.8.0"
+}
+
+* * * * *
+
+⚠️ Risk Mitigation
+------------------
+
+1.  **Amazon API Rate Limits**
+
+    -   Implement request queuing system
+
+    -   Add exponential backoff retry logic
+
+2.  **Design Consistency**
+
+    -   Daily UI reviews
+
+    -   Automated visual regression testing
+
+3.  **Performance Bottlenecks**
+
+    -   Continuous load testing
+
+    -   Edge caching with Cloudflare
+
+* * * * *
+
+🎯 Conclusion
+-------------
+
+This roadmap balances Spotify-inspired UI development with robust Amazon Ads functionality. Focus areas:
+
+1.  **Immediate Next Week:**
+
+    -   Complete theme system setup
+
+    -   Finalize Amazon API integration pattern
+
+    -   Build core campaign table component
+
+2.  **Long-Term Vision:**
+
+    -   Become the "Spotify for Amazon Ads Management"
+
+    -   Achieve <1s dashboard load times
+
+    -   Support 10,000+ simultaneous campaigns
+
+**Let's build a platform that makes Amazon Ads management feel like curating the perfect playlist!** 🎧📈
