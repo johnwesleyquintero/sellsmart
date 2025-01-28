@@ -24,11 +24,13 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        spotify: {
-          green: "#1ED760",
-          dark: "#1A1A1A",
-          darker: "#121212",
-          light: "#282828",
+        amazon: {
+          primary: "#232F3E",
+          secondary: "#37475A",
+          accent: "#FF9900",
+          light: "#F3F3F3",
+          text: "#0F1111",
+          muted: "#879596",
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",
@@ -60,7 +62,7 @@ export default {
         },
       },
       fontFamily: {
-        spotify: ['Circular Std', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
+        amazon: ["Amazon Ember", "system-ui", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif"],
       },
       borderRadius: {
         lg: "var(--radius)",

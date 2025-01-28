@@ -25,18 +25,27 @@ const dataSourceItems = [
 
 export function DashboardSidebar() {
   return (
-    <Sidebar>
+    <Sidebar className="bg-[#232F3E] text-white min-h-screen w-64 border-r border-[#3a4553]">
       <SidebarContent>
+        <div className="p-4 mb-6">
+          <h2 className="text-xl font-bold text-white">Amazon Analytics</h2>
+        </div>
+        
         <SidebarGroup>
-          <SidebarGroupLabel>Analytics</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-[#879596] text-sm font-medium px-4 mb-2">
+            Analytics
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {analyticItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url} className="flex items-center gap-2">
+                    <a 
+                      href={item.url} 
+                      className="flex items-center gap-3 px-4 py-2 text-[#D5DBDB] hover:bg-[#37475A] hover:text-white rounded-sm transition-colors duration-200"
+                    >
                       <item.icon className="w-4 h-4" />
-                      <span>{item.title}</span>
+                      <span className="text-sm">{item.title}</span>
                     </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -46,15 +55,20 @@ export function DashboardSidebar() {
         </SidebarGroup>
         
         <SidebarGroup className="mt-8">
-          <SidebarGroupLabel>Data Sources</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-[#879596] text-sm font-medium px-4 mb-2">
+            Data Sources
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {dataSourceItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url} className="flex items-center gap-2">
+                    <a 
+                      href={item.url} 
+                      className="flex items-center gap-3 px-4 py-2 text-[#D5DBDB] hover:bg-[#37475A] hover:text-white rounded-sm transition-colors duration-200"
+                    >
                       <item.icon className="w-4 h-4" />
-                      <span>{item.title}</span>
+                      <span className="text-sm">{item.title}</span>
                     </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
