@@ -1,12 +1,13 @@
 * * * * *
 
-SellSmart 🎯
+
+![Platform Overview](https://github.com/user-attachments/assets/b9e19cf5-0199-469b-93a5-c860b47b1098) SellSmart
 =====================
 
-*owerful analytics dashboard for monitoring and optimizing your Amazon advertising performance. Get started today and unlock the potential of your data.*
+*Powerful analytics dashboard for monitoring and optimizing your Amazon advertising performance. Get started today and unlock the potential of your data.*
 
-![Platform Overview](https://via.placeholder.com/1920x800.png?text=AdVantage+Platform+Preview)
-
+* * * * *
+Platform Overview
 * * * * *
 
 🌐 Application Structure
