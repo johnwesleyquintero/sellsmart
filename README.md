@@ -1,7 +1,7 @@
 * * * * *
       
       
-![](https://github.com/user-attachments/assets/4743ea44-bea9-4784-9eb0-cffd997d82f2) 
+
 ASYND: sellsmart
 
 
