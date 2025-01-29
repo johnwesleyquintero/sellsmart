@@ -1,7 +1,12 @@
 * * * * *
+      
+      
+![](https://github.com/user-attachments/assets/4743ea44-bea9-4784-9eb0-cffd997d82f2) 
+MAG Analytics
 
 
-![Platform Overview](https://github.com/user-attachments/assets/b9e19cf5-0199-469b-93a5-c860b47b1098) SellSmart
+
+
 =====================
 
 *Powerful analytics dashboard for monitoring and optimizing your Amazon advertising performance. Get started today and unlock the potential of your data.*
