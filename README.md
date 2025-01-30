@@ -1,5 +1,5 @@
 * * * * *
-ASYND: sellsmart project
+ASYND: sellsmart project roadmap.
 =====================
 
 *Powerful analytics dashboard for monitoring and optimizing your Amazon advertising performance. Get started today and unlock the potential of your data.*
