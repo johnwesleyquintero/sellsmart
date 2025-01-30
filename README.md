@@ -129,12 +129,12 @@ markdown
 ------------------------------
 
 ### Amazon Ads API Integration
-
+* * * * *
 typescript
 
-* * * * *
 
 // Sample Amazon Ads API Service
+```
 class AmazonAdsService {
   async getCampaignPerformance(campaignId: string): Promise<CampaignMetrics> {
     return await amazonAdvertisingClient.getCampaigns({
@@ -147,6 +147,7 @@ class AmazonAdsService {
     return await amazonML.generateBidSuggestions();
   }
 }
+```
 * * * * *
 ### Key Features Matrix
 * * * * *
