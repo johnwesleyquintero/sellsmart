@@ -1,3 +1,6 @@
+![Platform Overview](https://github.com/user-attachments/assets/b9e19cf5-0199-469b-93a5-c860b47b1098) SellSmart
+=====================
+
 * * * * *
 ASYND: sellsmart project roadmap.
 =====================
