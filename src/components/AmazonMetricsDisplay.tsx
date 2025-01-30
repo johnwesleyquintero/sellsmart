@@ -1,5 +1,4 @@
-import { DollarSign, TrendingUp, ShoppingCart, BarChart } from "lucide-react";
-import { KPICard } from "./metrics/KPICard";
+import { KPISection } from "./metrics/KPISection";
 import { MetricsTabs } from "./metrics/MetricsTabs";
 
 interface MetricsDisplayProps {
@@ -80,33 +79,12 @@ export function AmazonMetricsDisplay({ metrics }: MetricsDisplayProps) {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <KPICard
-          title="Total Sales"
-          value={`$${totalSales.toLocaleString()}`}
-          trend={10}
-          icon={DollarSign}
-        />
-        <KPICard
-          title="ROAS"
-          value={`${roas.toFixed(2)}x`}
-          trend={5}
-          icon={TrendingUp}
-        />
-        <KPICard
-          title="Total Orders"
-          value={totalOrders.toString()}
-          trend={15}
-          icon={ShoppingCart}
-        />
-        <KPICard
-          title="Conversion Rate"
-          value={`${conversionRate.toFixed(2)}%`}
-          trend={8}
-          icon={BarChart}
-        />
-      </div>
-
+      <KPISection
+        totalSales={totalSales}
+        totalOrders={totalOrders}
+        roas={roas}
+        conversionRate={conversionRate}
+      />
       <MetricsTabs
         weeklyMetrics={metrics.weeklyMetrics}
         monthlyMetrics={metrics.monthlyMetrics}
