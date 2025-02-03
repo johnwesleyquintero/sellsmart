@@ -16,13 +16,7 @@ import { Users, DollarSign, TrendingUp, Activity } from "lucide-react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
-
-interface UserData {
-  id: string;
-  email: string;
-  created_at: string;
-  last_sign_in_at: string;
-}
+import { AdminUser, AuthUser } from "@supabase/supabase-js";
 
 interface ProfileData {
   id: string;
@@ -34,13 +28,13 @@ const Admin = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
 
-  // Fetch users data
+  // Fetch users data with proper typing
   const { data: users, isLoading: isLoadingUsers } = useQuery({
     queryKey: ['admin-users'],
     queryFn: async () => {
       const { data: { users }, error } = await supabase.auth.admin.listUsers();
       if (error) throw error;
-      return users;
+      return users as AdminUser[];
     },
   });
 
@@ -105,7 +99,7 @@ const Admin = () => {
 
   // Filter users based on search and status
   const filteredUsers = users?.filter(user => {
-    const matchesSearch = user.email.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = user.email?.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = statusFilter === "all" || 
       (statusFilter === "active" && user.last_sign_in_at) ||
       (statusFilter === "inactive" && !user.last_sign_in_at);
