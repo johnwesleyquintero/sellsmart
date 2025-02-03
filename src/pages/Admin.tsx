@@ -11,43 +11,124 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
 import { KPICard } from "@/components/metrics/KPICard";
-import { MetricsTabs } from "@/components/metrics/MetricsTabs";
 import { DashboardSidebar } from "@/components/DashboardSidebar";
 import { Users, DollarSign, TrendingUp, Activity } from "lucide-react";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { supabase } from "@/integrations/supabase/client";
+import { useQuery } from "@tanstack/react-query";
+
+interface UserData {
+  id: string;
+  email: string;
+  created_at: string;
+  last_sign_in_at: string;
+}
+
+interface ProfileData {
+  id: string;
+  company_name: string | null;
+}
 
 const Admin = () => {
   const { toast } = useToast();
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
 
-  // Sample KPI data
+  // Fetch users data
+  const { data: users, isLoading: isLoadingUsers } = useQuery({
+    queryKey: ['admin-users'],
+    queryFn: async () => {
+      const { data: { users }, error } = await supabase.auth.admin.listUsers();
+      if (error) throw error;
+      return users;
+    },
+  });
+
+  // Fetch profiles data
+  const { data: profiles } = useQuery({
+    queryKey: ['admin-profiles'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*');
+      if (error) throw error;
+      return data as ProfileData[];
+    },
+  });
+
+  // Fetch metrics data
+  const { data: metrics } = useQuery({
+    queryKey: ['admin-metrics'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('amazon_ads_metrics')
+        .select('total_ad_sales, amount_spent')
+        .order('date', { ascending: false })
+        .limit(30);
+      if (error) throw error;
+      return data;
+    },
+  });
+
+  // Calculate KPI data
+  const totalUsers = users?.length || 0;
+  const totalRevenue = metrics?.reduce((sum, m) => sum + (m.total_ad_sales || 0), 0) || 0;
+  const totalSpend = metrics?.reduce((sum, m) => sum + (m.amount_spent || 0), 0) || 0;
+  const activeUsers = users?.filter(u => u.last_sign_in_at)?.length || 0;
+
   const kpiData = [
     {
       title: "Total Users",
-      value: "1,234",
+      value: totalUsers.toString(),
       trend: 12.5,
       icon: Users,
     },
     {
-      title: "Revenue",
-      value: "$45,678",
+      title: "Total Revenue",
+      value: `$${totalRevenue.toLocaleString()}`,
       trend: 8.2,
       icon: DollarSign,
     },
     {
-      title: "Growth Rate",
-      value: "23.5%",
+      title: "Total Ad Spend",
+      value: `$${totalSpend.toLocaleString()}`,
       trend: 15.3,
       icon: TrendingUp,
     },
     {
-      title: "Active Campaigns",
-      value: "45",
+      title: "Active Users",
+      value: activeUsers.toString(),
       trend: 5.7,
       icon: Activity,
     },
   ];
+
+  // Filter users based on search and status
+  const filteredUsers = users?.filter(user => {
+    const matchesSearch = user.email.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesStatus = statusFilter === "all" || 
+      (statusFilter === "active" && user.last_sign_in_at) ||
+      (statusFilter === "inactive" && !user.last_sign_in_at);
+    return matchesSearch && matchesStatus;
+  });
+
+  const handleDeleteUser = async (userId: string) => {
+    try {
+      const { error } = await supabase.auth.admin.deleteUser(userId);
+      if (error) throw error;
+      
+      toast({
+        title: "User deleted successfully",
+        description: "The user has been removed from the system.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error deleting user",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <SidebarProvider>
@@ -96,9 +177,6 @@ const Admin = () => {
                     <SelectItem value="inactive">Inactive</SelectItem>
                   </SelectContent>
                 </Select>
-                <Button className="bg-spotify-green hover:bg-spotify-green/90 text-black font-bold">
-                  Add User
-                </Button>
               </div>
 
               {/* User Table */}
@@ -107,48 +185,53 @@ const Admin = () => {
                   <thead>
                     <tr className="border-b border-gray-700">
                       <th className="text-left py-3 px-4 text-spotify-green font-spotify">User</th>
-                      <th className="text-left py-3 px-4 text-spotify-green font-spotify">Email</th>
+                      <th className="text-left py-3 px-4 text-spotify-green font-spotify">Company</th>
                       <th className="text-left py-3 px-4 text-spotify-green font-spotify">Status</th>
+                      <th className="text-left py-3 px-4 text-spotify-green font-spotify">Joined</th>
                       <th className="text-left py-3 px-4 text-spotify-green font-spotify">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {/* Sample user data */}
-                    <tr className="border-b border-gray-700 hover:bg-spotify-dark/50 transition-colors">
-                      <td className="py-3 px-4 text-white">John Doe</td>
-                      <td className="py-3 px-4 text-white">john@example.com</td>
-                      <td className="py-3 px-4">
-                        <span className="px-2 py-1 rounded-full text-xs bg-spotify-green text-black font-bold">
-                          Active
-                        </span>
-                      </td>
-                      <td className="py-3 px-4">
-                        <div className="flex gap-2">
-                          <Button variant="ghost" size="sm" className="text-spotify-green hover:text-spotify-green/80">
-                            Edit
-                          </Button>
-                          <Button variant="ghost" size="sm" className="text-red-500 hover:text-red-400">
-                            Delete
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
+                    {isLoadingUsers ? (
+                      <tr>
+                        <td colSpan={5} className="text-center py-4 text-white">Loading users...</td>
+                      </tr>
+                    ) : filteredUsers?.map((user) => {
+                      const profile = profiles?.find(p => p.id === user.id);
+                      return (
+                        <tr key={user.id} className="border-b border-gray-700 hover:bg-spotify-dark/50 transition-colors">
+                          <td className="py-3 px-4 text-white">{user.email}</td>
+                          <td className="py-3 px-4 text-white">{profile?.company_name || '-'}</td>
+                          <td className="py-3 px-4">
+                            <span className={`px-2 py-1 rounded-full text-xs ${
+                              user.last_sign_in_at ? 'bg-spotify-green text-black' : 'bg-gray-600 text-white'
+                            } font-bold`}>
+                              {user.last_sign_in_at ? 'Active' : 'Inactive'}
+                            </span>
+                          </td>
+                          <td className="py-3 px-4 text-white">
+                            {new Date(user.created_at).toLocaleDateString()}
+                          </td>
+                          <td className="py-3 px-4">
+                            <div className="flex gap-2">
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                className="text-red-500 hover:text-red-400"
+                                onClick={() => handleDeleteUser(user.id)}
+                              >
+                                Delete
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
             </CardContent>
           </Card>
-
-          {/* Metrics Section */}
-          <MetricsTabs
-            weeklyMetrics={[]}
-            monthlyMetrics={[]}
-            detailedMetrics={{
-              asinMetrics: [],
-              searchTermMetrics: [],
-              skuMetrics: [],
-            }}
-          />
         </div>
       </div>
     </SidebarProvider>
