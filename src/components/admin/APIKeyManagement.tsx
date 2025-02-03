@@ -12,7 +12,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
-import { Key, Plus, Save, Trash } from "lucide-react";
+import { Key, Plus, Trash } from "lucide-react";
 
 interface APIKey {
   id: string;
@@ -34,7 +34,7 @@ export function APIKeyManagement() {
         .from('api_keys')
         .select('*');
       if (error) throw error;
-      return data as APIKey[];
+      return data as unknown as APIKey[];
     },
   });
 
@@ -93,9 +93,9 @@ export function APIKeyManagement() {
   };
 
   return (
-    <Card className="bg-spotify-light border-none mb-8">
+    <Card className="bg-white border-gray-200">
       <CardHeader>
-        <CardTitle className="text-white text-2xl font-spotify flex items-center gap-2">
+        <CardTitle className="text-black text-2xl font-spotify flex items-center gap-2">
           <Key className="w-6 h-6" />
           API Key Management
         </CardTitle>
@@ -106,10 +106,10 @@ export function APIKeyManagement() {
           <div className="flex gap-4 items-end">
             <div className="flex-1">
               <Select value={newKeyType} onValueChange={setNewKeyType}>
-                <SelectTrigger className="bg-spotify-dark border-none text-white">
+                <SelectTrigger className="bg-white border-gray-200 text-black">
                   <SelectValue placeholder="Select key type" />
                 </SelectTrigger>
-                <SelectContent className="bg-spotify-dark border-none">
+                <SelectContent>
                   <SelectItem value="supabase">Supabase</SelectItem>
                   <SelectItem value="google_sheets">Google Sheets</SelectItem>
                 </SelectContent>
@@ -121,13 +121,13 @@ export function APIKeyManagement() {
                 placeholder="Enter API key"
                 value={newKeyValue}
                 onChange={(e) => setNewKeyValue(e.target.value)}
-                className="bg-spotify-dark border-none text-white"
+                className="bg-white border-gray-200 text-black"
               />
             </div>
             <Button
               onClick={handleAddKey}
               disabled={!newKeyType || !newKeyValue}
-              className="bg-spotify-green hover:bg-spotify-green/90"
+              className="bg-black hover:bg-gray-800 text-white"
             >
               <Plus className="w-4 h-4 mr-2" />
               Add Key
@@ -139,13 +139,13 @@ export function APIKeyManagement() {
             {apiKeys?.map((key) => (
               <div
                 key={key.id}
-                className="flex items-center justify-between p-4 bg-spotify-dark rounded-lg"
+                className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
               >
                 <div className="flex items-center gap-4">
-                  <Key className="w-5 h-5 text-spotify-green" />
+                  <Key className="w-5 h-5 text-black" />
                   <div>
-                    <p className="text-white font-medium">{key.key_type}</p>
-                    <p className="text-sm text-gray-400">
+                    <p className="text-black font-medium">{key.key_type}</p>
+                    <p className="text-sm text-gray-600">
                       Added on {new Date(key.created_at).toLocaleDateString()}
                     </p>
                   </div>
@@ -154,7 +154,7 @@ export function APIKeyManagement() {
                   variant="ghost"
                   size="sm"
                   onClick={() => handleDeleteKey(key.id)}
-                  className="text-red-500 hover:text-red-400"
+                  className="text-red-500 hover:text-red-600"
                 >
                   <Trash className="w-4 h-4" />
                 </Button>

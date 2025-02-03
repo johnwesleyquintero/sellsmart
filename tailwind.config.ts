@@ -26,9 +26,9 @@ export default {
         foreground: "hsl(var(--foreground))",
         spotify: {
           green: "#1ED760",
-          dark: "#1A1A1A",
-          darker: "#121212",
-          light: "#282828",
+          dark: "#FFFFFF", // Changed to white
+          darker: "#FFFFFF", // Changed to white
+          light: "#FFFFFF", // Changed to white
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",
