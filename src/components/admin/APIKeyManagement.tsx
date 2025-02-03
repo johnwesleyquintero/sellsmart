@@ -13,20 +13,13 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { Key, Plus, Trash } from "lucide-react";
-
-interface APIKey {
-  id: string;
-  key_type: string;
-  key_value: string;
-  created_at: string;
-}
+import type { APIKey } from "@/types/api";
 
 export function APIKeyManagement() {
   const [newKeyType, setNewKeyType] = useState("");
   const [newKeyValue, setNewKeyValue] = useState("");
   const { toast } = useToast();
 
-  // Fetch API keys
   const { data: apiKeys, refetch } = useQuery({
     queryKey: ['api-keys'],
     queryFn: async () => {
@@ -34,7 +27,7 @@ export function APIKeyManagement() {
         .from('api_keys')
         .select('*');
       if (error) throw error;
-      return data as unknown as APIKey[];
+      return data as APIKey[];
     },
   });
 
@@ -46,6 +39,7 @@ export function APIKeyManagement() {
           {
             key_type: newKeyType,
             key_value: newKeyValue,
+            user_id: (await supabase.auth.getUser()).data.user?.id
           }
         ]);
 
@@ -102,7 +96,6 @@ export function APIKeyManagement() {
       </CardHeader>
       <CardContent>
         <div className="space-y-6">
-          {/* Add new API key form */}
           <div className="flex gap-4 items-end">
             <div className="flex-1">
               <Select value={newKeyType} onValueChange={setNewKeyType}>
@@ -134,7 +127,6 @@ export function APIKeyManagement() {
             </Button>
           </div>
 
-          {/* API Keys list */}
           <div className="space-y-4">
             {apiKeys?.map((key) => (
               <div
@@ -154,7 +146,7 @@ export function APIKeyManagement() {
                   variant="ghost"
                   size="sm"
                   onClick={() => handleDeleteKey(key.id)}
-                  className="text-red-500 hover:text-red-600"
+                  className="text-red-500 hover:text-red-600 hover:bg-red-50"
                 >
                   <Trash className="w-4 h-4" />
                 </Button>
