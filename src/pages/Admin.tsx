@@ -17,6 +17,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { AdminUser, AuthUser } from "@supabase/supabase-js";
+import { APIKeyManagement } from "@/components/admin/APIKeyManagement";
 
 interface ProfileData {
   id: string;
@@ -147,6 +148,9 @@ const Admin = () => {
               />
             ))}
           </div>
+
+          {/* API Key Management Section */}
+          <APIKeyManagement />
 
           {/* User Management Section */}
           <Card className="bg-spotify-light border-none mb-8">
