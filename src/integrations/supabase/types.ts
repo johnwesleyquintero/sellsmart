@@ -342,6 +342,38 @@ export type Database = {
         }
         Relationships: []
       }
+      api_keys: {
+        Row: {
+          id: string
+          user_id: string
+          key_type: string
+          key_value: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          key_type: string
+          key_value: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          key_type?: string
+          key_value?: string
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "api_keys_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       campaign_targets: {
         Row: {
           created_at: string
@@ -517,7 +549,7 @@ export type Tables<
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
         Database[PublicTableNameOrOptions["schema"]]["Views"])
-    : never = never,
+    : never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
       Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
