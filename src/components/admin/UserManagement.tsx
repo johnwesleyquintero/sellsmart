@@ -16,10 +16,9 @@ import { Users } from "lucide-react";
 
 interface Profile {
   id: string;
-  email: string;
   company_name: string | null;
   created_at: string;
-  last_sign_in_at?: string;
+  updated_at: string | null;
 }
 
 export function UserManagement() {
@@ -42,9 +41,7 @@ export function UserManagement() {
   // Filter profiles based on search and status
   const filteredProfiles = profiles?.filter(profile => {
     const matchesSearch = profile.company_name?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesStatus = statusFilter === "all" || 
-      (statusFilter === "active" && profile.last_sign_in_at) ||
-      (statusFilter === "inactive" && !profile.last_sign_in_at);
+    const matchesStatus = statusFilter === "all";
     return matchesSearch && matchesStatus;
   });
 
@@ -92,8 +89,6 @@ export function UserManagement() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Users</SelectItem>
-              <SelectItem value="active">Active</SelectItem>
-              <SelectItem value="inactive">Inactive</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -103,7 +98,6 @@ export function UserManagement() {
             <thead>
               <tr className="border-b border-gray-200">
                 <th className="text-left py-3 px-4 text-black font-spotify">Company</th>
-                <th className="text-left py-3 px-4 text-black font-spotify">Status</th>
                 <th className="text-left py-3 px-4 text-black font-spotify">Joined</th>
                 <th className="text-left py-3 px-4 text-black font-spotify">Actions</th>
               </tr>
@@ -111,18 +105,11 @@ export function UserManagement() {
             <tbody>
               {isLoading ? (
                 <tr>
-                  <td colSpan={4} className="text-center py-4 text-gray-600">Loading users...</td>
+                  <td colSpan={3} className="text-center py-4 text-gray-600">Loading users...</td>
                 </tr>
               ) : filteredProfiles?.map((profile) => (
                 <tr key={profile.id} className="border-b border-gray-100">
                   <td className="py-3 px-4 text-black">{profile.company_name || 'N/A'}</td>
-                  <td className="py-3 px-4">
-                    <span className={`px-2 py-1 rounded-full text-xs ${
-                      profile.last_sign_in_at ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-                    } font-medium`}>
-                      {profile.last_sign_in_at ? 'Active' : 'Inactive'}
-                    </span>
-                  </td>
                   <td className="py-3 px-4 text-gray-600">
                     {new Date(profile.created_at).toLocaleDateString()}
                   </td>
