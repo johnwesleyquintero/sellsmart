@@ -15,13 +15,21 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { Switch } from "@/components/ui/switch";
 
+interface GoogleWorkspaceSettings {
+  id?: string;
+  user_id?: string;
+  spreadsheet_id?: string;
+  sheet_name?: string;
+  auto_sync?: boolean;
+  sync_frequency?: string;
+  last_synced_at?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
 interface GoogleIntegrationProps {
-  initialSettings?: {
-    spreadsheetId?: string;
-    sheetName?: string;
-    autoSync?: boolean;
-  };
-  onSave: (values: any) => void;
+  initialSettings?: GoogleWorkspaceSettings;
+  onSave: (values: Partial<GoogleWorkspaceSettings>) => void;
   isLoading?: boolean;
 }
 
@@ -31,11 +39,11 @@ export function GoogleIntegrationSettings({
   isLoading 
 }: GoogleIntegrationProps) {
   const [testingConnection, setTestingConnection] = useState(false);
-  const form = useForm({
+  const form = useForm<GoogleWorkspaceSettings>({
     defaultValues: {
-      spreadsheetId: initialSettings?.spreadsheetId || "",
-      sheetName: initialSettings?.sheetName || "",
-      autoSync: initialSettings?.autoSync || false,
+      spreadsheet_id: initialSettings?.spreadsheet_id || "",
+      sheet_name: initialSettings?.sheet_name || "",
+      auto_sync: initialSettings?.auto_sync || false,
     }
   });
 
@@ -59,7 +67,7 @@ export function GoogleIntegrationSettings({
         <form onSubmit={form.handleSubmit(onSave)} className="space-y-6">
           <FormField
             control={form.control}
-            name="spreadsheetId"
+            name="spreadsheet_id"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Google Sheets ID</FormLabel>
@@ -75,7 +83,7 @@ export function GoogleIntegrationSettings({
 
           <FormField
             control={form.control}
-            name="sheetName"
+            name="sheet_name"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Sheet Name</FormLabel>
@@ -91,7 +99,7 @@ export function GoogleIntegrationSettings({
 
           <FormField
             control={form.control}
-            name="autoSync"
+            name="auto_sync"
             render={({ field }) => (
               <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                 <div className="space-y-0.5">
