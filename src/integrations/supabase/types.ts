@@ -342,6 +342,30 @@ export type Database = {
         }
         Relationships: []
       }
+      api_keys: {
+        Row: {
+          created_at: string
+          id: string
+          key_type: string
+          key_value: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          key_type: string
+          key_value: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          key_type?: string
+          key_value?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       campaign_targets: {
         Row: {
           created_at: string
