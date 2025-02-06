@@ -405,6 +405,42 @@ export type Database = {
         }
         Relationships: []
       }
+      google_workspace_settings: {
+        Row: {
+          auto_sync: boolean | null
+          created_at: string
+          id: string
+          last_synced_at: string | null
+          sheet_name: string | null
+          spreadsheet_id: string | null
+          sync_frequency: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          auto_sync?: boolean | null
+          created_at?: string
+          id?: string
+          last_synced_at?: string | null
+          sheet_name?: string | null
+          spreadsheet_id?: string | null
+          sync_frequency?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          auto_sync?: boolean | null
+          created_at?: string
+          id?: string
+          last_synced_at?: string | null
+          sheet_name?: string | null
+          spreadsheet_id?: string | null
+          sync_frequency?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profile_creation_errors: {
         Row: {
           created_at: string | null

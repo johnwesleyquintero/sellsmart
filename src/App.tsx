@@ -15,6 +15,7 @@ import DashboardHistory from "./pages/DashboardHistory";
 import DashboardDSP from "./pages/DashboardDSP";
 import DashboardImport from "./pages/DashboardImport";
 import DashboardReports from "./pages/DashboardReports";
+import DashboardSettings from "./pages/DashboardSettings";
 import Admin from "./pages/Admin";
 
 const queryClient = new QueryClient({
@@ -122,6 +123,14 @@ const App = () => {
                   element={
                     <ProtectedRoute>
                       <DashboardReports />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/dashboard/settings"
+                  element={
+                    <ProtectedRoute>
+                      <DashboardSettings />
                     </ProtectedRoute>
                   }
                 />
