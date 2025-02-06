@@ -29,14 +29,12 @@ const Login = () => {
       });
 
       if (error) {
-        console.error("Login error:", error);
-        
         if (error.message === "Invalid login credentials") {
-          toast.error("Email or password is incorrect. Please try again.");
+          toast.error("Email or password is incorrect");
         } else if (error.message.includes("Email not confirmed")) {
-          toast.error("Please verify your email before logging in.");
+          toast.error("Please verify your email before logging in");
         } else {
-          toast.error("Login failed. Please try again.");
+          toast.error(error.message);
         }
         setIsLoading(false);
         return;
@@ -47,9 +45,9 @@ const Login = () => {
         toast.success("Successfully logged in!");
         navigate(isAdmin ? "/admin" : "/dashboard");
       }
-    } catch (error) {
-      console.error("Unexpected error:", error);
-      toast.error("An unexpected error occurred. Please try again.");
+    } catch (error: any) {
+      console.error("Login error:", error);
+      toast.error("An unexpected error occurred");
     } finally {
       setIsLoading(false);
     }

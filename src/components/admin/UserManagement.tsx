@@ -12,35 +12,49 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
-import { User } from "@supabase/supabase-js";
 import { Users } from "lucide-react";
+
+interface Profile {
+  id: string;
+  email: string;
+  company_name: string | null;
+  created_at: string;
+  last_sign_in_at?: string;
+}
 
 export function UserManagement() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const { toast } = useToast();
 
-  const { data: users, isLoading } = useQuery({
-    queryKey: ['admin-users'],
+  const { data: profiles, isLoading } = useQuery({
+    queryKey: ['admin-profiles'],
     queryFn: async () => {
-      const { data: { users }, error } = await supabase.auth.admin.listUsers();
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*');
+      
       if (error) throw error;
-      return users as User[];
+      return data as Profile[];
     },
   });
 
-  // Filter users based on search and status
-  const filteredUsers = users?.filter(user => {
-    const matchesSearch = user.email?.toLowerCase().includes(searchQuery.toLowerCase());
+  // Filter profiles based on search and status
+  const filteredProfiles = profiles?.filter(profile => {
+    const matchesSearch = profile.company_name?.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesStatus = statusFilter === "all" || 
-      (statusFilter === "active" && user.last_sign_in_at) ||
-      (statusFilter === "inactive" && !user.last_sign_in_at);
+      (statusFilter === "active" && profile.last_sign_in_at) ||
+      (statusFilter === "inactive" && !profile.last_sign_in_at);
     return matchesSearch && matchesStatus;
   });
 
   const handleDeleteUser = async (userId: string) => {
     try {
-      const { error } = await supabase.auth.admin.deleteUser(userId);
+      const { error } = await supabase
+        .from('profiles')
+        .delete()
+        .eq('id', userId);
+      
       if (error) throw error;
       
       toast({
@@ -88,7 +102,7 @@ export function UserManagement() {
           <table className="w-full">
             <thead>
               <tr className="border-b border-gray-200">
-                <th className="text-left py-3 px-4 text-black font-spotify">Email</th>
+                <th className="text-left py-3 px-4 text-black font-spotify">Company</th>
                 <th className="text-left py-3 px-4 text-black font-spotify">Status</th>
                 <th className="text-left py-3 px-4 text-black font-spotify">Joined</th>
                 <th className="text-left py-3 px-4 text-black font-spotify">Actions</th>
@@ -99,25 +113,25 @@ export function UserManagement() {
                 <tr>
                   <td colSpan={4} className="text-center py-4 text-gray-600">Loading users...</td>
                 </tr>
-              ) : filteredUsers?.map((user) => (
-                <tr key={user.id} className="border-b border-gray-100">
-                  <td className="py-3 px-4 text-black">{user.email}</td>
+              ) : filteredProfiles?.map((profile) => (
+                <tr key={profile.id} className="border-b border-gray-100">
+                  <td className="py-3 px-4 text-black">{profile.company_name || 'N/A'}</td>
                   <td className="py-3 px-4">
                     <span className={`px-2 py-1 rounded-full text-xs ${
-                      user.last_sign_in_at ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+                      profile.last_sign_in_at ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
                     } font-medium`}>
-                      {user.last_sign_in_at ? 'Active' : 'Inactive'}
+                      {profile.last_sign_in_at ? 'Active' : 'Inactive'}
                     </span>
                   </td>
                   <td className="py-3 px-4 text-gray-600">
-                    {new Date(user.created_at).toLocaleDateString()}
+                    {new Date(profile.created_at).toLocaleDateString()}
                   </td>
                   <td className="py-3 px-4">
                     <Button 
                       variant="ghost" 
                       size="sm" 
                       className="text-red-500 hover:text-red-600 hover:bg-red-50"
-                      onClick={() => handleDeleteUser(user.id)}
+                      onClick={() => handleDeleteUser(profile.id)}
                     >
                       Delete
                     </Button>
