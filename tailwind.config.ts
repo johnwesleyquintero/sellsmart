@@ -15,6 +15,7 @@ export default {
       padding: "2rem",
       screens: {
         "2xl": "1400px",
+        "3xl": "1600px",
       },
     },
     extend: {
@@ -26,9 +27,11 @@ export default {
         foreground: "hsl(var(--foreground))",
         spotify: {
           green: "#1ED760",
-          dark: "#1A1A1A",
-          darker: "#121212",
-          light: "#282828",
+          dark: "#191414",    // Spotify's official dark color
+          darker: "#000000",  // True black from Spotify's palette
+          light: "#FFFFFF",   // Official white
+          muted: "#B3B3B3",   // Spotify's muted text color
+          secondary: "#535353" // Secondary spotify color
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",
@@ -41,6 +44,14 @@ export default {
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
+        },
+        success: {
+          DEFAULT: "hsl(var(--success))",
+          foreground: "hsl(var(--success-foreground))",
+        },
+        warning: {
+          DEFAULT: "hsl(var(--warning))",
+          foreground: "hsl(var(--warning-foreground))",
         },
         muted: {
           DEFAULT: "hsl(var(--muted))",
@@ -60,12 +71,34 @@ export default {
         },
       },
       fontFamily: {
-        spotify: ['Circular Std', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
+        spotify: [
+          'Circular Std', 
+          'system-ui', 
+          '-apple-system', 
+          'BlinkMacSystemFont', 
+          'Segoe UI', 
+          'Roboto', 
+          'Helvetica Neue', 
+          'Arial', 
+          'sans-serif'
+        ],
+        sans: [
+          'Inter var', 
+          'system-ui', 
+          '-apple-system', 
+          'BlinkMacSystemFont', 
+          'Segoe UI', 
+          'Roboto', 
+          'Helvetica Neue', 
+          'Arial', 
+          'sans-serif'
+        ]
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+        xs: "calc(var(--radius) - 6px)",
       },
       keyframes: {
         "accordion-down": {
@@ -76,12 +109,47 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "slide-in": {
+          from: { transform: "translateY(20px)", opacity: "0" },
+          to: { transform: "translateY(0)", opacity: "1" },
+        },
+        "pulse": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.5" },
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "slide-in": "slide-in 0.3s ease-out",
+        "pulse": "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite"
       },
+      backgroundImage: {
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+        "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        "spotify-gradient": "linear-gradient(90deg, #1ED760 0%, #191414 100%)"
+      },
+      backdropBlur: {
+        xs: '2px',
+        sm: '4px',
+        md: '8px',
+        lg: '12px',
+      }
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require('@tailwindcss/container-queries'),
+    require('tailwindcss-radix')(),
+    require('tailwindcss-fluid-type')({
+      settings: {
+        fontSizeMin: 1.125,  // 18px
+        fontSizeMax: 1.25,   // 20px
+        ratioMin: 1.125,     // Minor third
+        ratioMax: 1.2,       // Major third
+        screenMin: 20,       // 320px
+        screenMax: 96,       // 1536px
+      }
+    })
+  ],
 } satisfies Config;
