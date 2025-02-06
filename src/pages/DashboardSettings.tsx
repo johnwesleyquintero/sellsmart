@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { Loader2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/components/AuthProvider';
 import {
   Form,
   FormControl,
@@ -29,10 +30,12 @@ interface GoogleWorkspaceSettings {
   sheet_name: string;
   auto_sync: boolean;
   sync_frequency: 'hourly' | 'daily' | 'weekly';
+  user_id: string;
 }
 
 const DashboardSettings = () => {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
   const form = useForm<GoogleWorkspaceSettings>();
 
   // Fetch existing settings
@@ -47,14 +50,22 @@ const DashboardSettings = () => {
       if (error) throw error;
       return data;
     },
+    enabled: !!user,
   });
 
   // Update settings mutation
   const mutation = useMutation({
     mutationFn: async (values: GoogleWorkspaceSettings) => {
+      if (!user?.id) throw new Error('User not authenticated');
+      
+      const settingsWithUserId = {
+        ...values,
+        user_id: user.id,
+      };
+
       const { error } = await supabase
         .from('google_workspace_settings')
-        .upsert(values);
+        .upsert(settingsWithUserId);
 
       if (error) throw error;
     },
@@ -68,8 +79,16 @@ const DashboardSettings = () => {
     },
   });
 
-  const onSubmit = (values: GoogleWorkspaceSettings) => {
-    mutation.mutate(values);
+  const onSubmit = (values: Omit<GoogleWorkspaceSettings, 'user_id'>) => {
+    if (!user?.id) {
+      toast.error('You must be logged in to update settings');
+      return;
+    }
+
+    mutation.mutate({
+      ...values,
+      user_id: user.id,
+    });
   };
 
   if (isLoading) {
@@ -148,7 +167,7 @@ const DashboardSettings = () => {
             <FormField
               control={form.control}
               name="sync_frequency"
-              defaultValue={settings?.sync_frequency || 'daily'}
+              defaultValue={settings?.sync_frequency as 'hourly' | 'daily' | 'weekly' || 'daily'}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Sync Frequency</FormLabel>
