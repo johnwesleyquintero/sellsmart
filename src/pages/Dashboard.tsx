@@ -1,31 +1,46 @@
+import { useState } from "react";
 import { DashboardSidebar } from "@/components/DashboardSidebar";
 import { DataImport } from "@/components/DataImport";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { AmazonMetricsDisplay } from "@/components/AmazonMetricsDisplay";
 import { calculateMetrics } from "@/utils/amazonMetrics";
-import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { DashboardFilters } from "@/components/dashboard/DashboardFilters";
 import { DashboardTabs } from "@/components/dashboard/DashboardTabs";
 
 const Dashboard = () => {
-  const [dateRange, setDateRange] = useState("14");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [filters, setFilters] = useState({
+    dateRange: "14",
+    marketplace: "all",
+    category: "all"
+  });
   
-  // Fetch metrics data from Supabase
+  // Fetch metrics data from Supabase with filters
   const { data: metricsData, isLoading } = useQuery({
-    queryKey: ['metrics', dateRange],
+    queryKey: ['metrics', filters],
     queryFn: async () => {
-      const startDate = new Date();
-      startDate.setDate(startDate.getDate() - parseInt(dateRange));
-      
-      const { data, error } = await supabase
+      let query = supabase
         .from('amazon_ads_metrics')
-        .select('*')
-        .gte('date', startDate.toISOString().split('T')[0])
-        .order('date', { ascending: true });
+        .select('*');
         
+      // Apply filters
+      if (filters.dateRange !== 'all') {
+        const startDate = new Date();
+        startDate.setDate(startDate.getDate() - parseInt(filters.dateRange));
+        query = query.gte('date', startDate.toISOString().split('T')[0]);
+      }
+      
+      if (filters.marketplace !== 'all') {
+        query = query.eq('marketplace_string_id', filters.marketplace);
+      }
+      
+      if (filters.category !== 'all') {
+        query = query.eq('advertised_product_category', filters.category);
+      }
+      
+      const { data, error } = await query.order('date', { ascending: true });
+      
       if (error) throw error;
       return calculateMetrics(data || []);
     }
@@ -37,11 +52,10 @@ const Dashboard = () => {
         <DashboardSidebar />
         <main className="flex-1 p-8">
           <div className="max-y-8">
-            <DashboardHeader
-              searchQuery={searchQuery}
-              dateRange={dateRange}
-              onSearchChange={setSearchQuery}
-              onDateRangeChange={setDateRange}
+            <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
+            
+            <DashboardFilters
+              onFilterChange={setFilters}
             />
 
             {isLoading ? (
