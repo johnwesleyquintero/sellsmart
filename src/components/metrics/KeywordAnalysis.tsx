@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MetricsTable } from "./MetricsTable";
+import { KeywordHeatmap } from "./KeywordHeatmap";
 
 interface KeywordAnalysisProps {
   data: Array<{
@@ -44,6 +45,7 @@ export function KeywordAnalysis({ data }: KeywordAnalysisProps) {
 
   return (
     <div className="space-y-6">
+      <KeywordHeatmap />
       <Card className="bg-spotify-light text-white">
         <CardHeader>
           <CardTitle>Keyword Performance</CardTitle>
