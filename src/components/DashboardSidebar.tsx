@@ -1,44 +1,53 @@
+import { DashboardMenuItem } from "./ui/DashboardMenuItem";
+import { DashboardGroupLabel } from "./ui/DashboardGroupLabel";
+
 import { useLocation, useNavigate } from "react-router-dom";
-import { Home, BarChart2, Target, History, Database } from "lucide-react";
+import { Home, BarChart2, Target, History, Database, Settings } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarGroupContent,
   SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { LucideIcon } from "lucide-react";
+import { ReactNode } from "react";
 
-const navigationItems = [
-  { 
-    title: "Overview", 
-    icon: Home, 
+type NavigationItem = {
+  title: string;
+  icon: LucideIcon | ReactNode;
+  path: string;
+  description: string;
+};
+
+const navigationItems: NavigationItem[] = [
+  {
+    title: "Overview",
+    icon: Home,
     path: "/dashboard",
     description: "Dashboard overview and key metrics"
   },
-  { 
-    title: "Insights", 
-    icon: BarChart2, 
+  {
+    title: "Insights",
+    icon: BarChart2,
     path: "/dashboard/insights",
     description: "Detailed performance analytics"
   },
-  { 
-    title: "Targets & Search Terms", 
-    icon: Target, 
+  {
+    title: "Targets & Search Terms",
+    icon: Target,
     path: "/dashboard/targets",
     description: "Campaign targets and search term analysis"
   },
-  { 
-    title: "History", 
-    icon: History, 
+  {
+    title: "History",
+    icon: History,
     path: "/dashboard/history",
     description: "Historical performance data"
   },
-  { 
-    title: "DSP", 
-    icon: Database, 
+  {
+    title: "DSP",
+    icon: Database,
     path: "/dashboard/dsp",
     description: "Demand-side platform management"
   },
@@ -48,30 +57,100 @@ export function DashboardSidebar() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleNavigation = (path: string) => {
-    navigate(path);
-  };
+  return (
+    <Sidebar>
+      <SidebarContent>
+        <SidebarGroup>
+          <DashboardGroupLabel label="Analytics" />
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {navigationItems.map((item) => (
+                <DashboardMenuItem
+                  key={item.title}
+                  title={item.title}
+                  icon={typeof item.icon === 'function' ? <item.icon /> : item.icon}
+                  path={item.path}
+                  description={item.description}
+                />
+              ))}
+              <DashboardMenuItem
+                key="settings"
+                title="Settings"
+                icon={<Settings className="w-4 h-4" />}
+                path="/dashboard/settings"
+                description="Settings"
+              />
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      </SidebarContent>
+    </Sidebar>
+  );
+}
+=======
+import { DashboardMenuItem } from "./ui/DashboardMenuItem";
+import { DashboardGroupLabel } from "./ui/DashboardGroupLabel";
+
+const navigationItems = [
+  {
+    title: "Overview",
+    icon: Home,
+    path: "/dashboard",
+    description: "Dashboard overview and key metrics"
+  },
+  {
+    title: "Insights",
+    icon: BarChart2,
+    path: "/dashboard/insights",
+    description: "Detailed performance analytics"
+  },
+  {
+    title: "Targets & Search Terms",
+    icon: Target,
+    path: "/dashboard/targets",
+    description: "Campaign targets and search term analysis"
+  },
+  {
+    title: "History",
+    icon: History,
+    path: "/dashboard/history",
+    description: "Historical performance data"
+  },
+  {
+    title: "DSP",
+    icon: Database,
+    path: "/dashboard/dsp",
+    description: "Demand-side platform management"
+  },
+];
+
+export function DashboardSidebar() {
+  const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Analytics</SidebarGroupLabel>
+          <DashboardGroupLabel label="Analytics" />
           <SidebarGroupContent>
             <SidebarMenu>
               {navigationItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    onClick={() => handleNavigation(item.path)}
-                    isActive={location.pathname === item.path}
-                    className="flex items-center gap-2"
-                    title={item.description}
-                  >
-                    <item.icon className="w-4 h-4" />
-                    <span>{item.title}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                <DashboardMenuItem
+                  key={item.title}
+                  title={item.title}
+                  icon={item.icon}
+                  path={item.path}
+                  description={item.description}
+                />
               ))}
+              <DashboardMenuItem
+                key="settings"
+                title="Settings"
+                icon={<Settings className="w-4 h-4" />}
+                path="/dashboard/settings"
+                description="Settings"
+              />
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
