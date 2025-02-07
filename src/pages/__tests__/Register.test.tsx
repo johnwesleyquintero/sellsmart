@@ -3,31 +3,32 @@ import { BrowserRouter } from 'react-router-dom';
 import Register from '../Register';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { vi, describe, it, expect, beforeEach } from 'vitest';
 
 // Mock dependencies
-jest.mock('@/integrations/supabase/client', () => ({
+vi.mock('@/integrations/supabase/client', () => ({
   supabase: {
     auth: {
-      signUp: jest.fn(),
+      signUp: vi.fn(),
     },
   },
 }));
 
-jest.mock('sonner', () => ({
+vi.mock('sonner', () => ({
   toast: {
-    error: jest.fn(),
-    success: jest.fn(),
+    error: vi.fn(),
+    success: vi.fn(),
   },
 }));
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => jest.fn(),
+vi.mock('react-router-dom', () => ({
+  ...vi.importActual('react-router-dom'),
+  useNavigate: () => vi.fn(),
 }));
 
 describe('Register Component', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('renders registration form', () => {
@@ -63,7 +64,8 @@ describe('Register Component', () => {
   });
 
   it('handles successful registration', async () => {
-    (supabase.auth.signUp as jest.Mock).mockResolvedValueOnce({
+    const mockSignUp = supabase.auth.signUp as unknown as ReturnType<typeof vi.fn>;
+    mockSignUp.mockResolvedValueOnce({
       data: { user: { id: '123' } },
       error: null,
     });
@@ -97,8 +99,9 @@ describe('Register Component', () => {
   });
 
   it('handles registration error', async () => {
+    const mockSignUp = supabase.auth.signUp as unknown as ReturnType<typeof vi.fn>;
     const errorMessage = 'Registration failed';
-    (supabase.auth.signUp as jest.Mock).mockResolvedValueOnce({
+    mockSignUp.mockResolvedValueOnce({
       data: null,
       error: { message: errorMessage },
     });

@@ -10,7 +10,7 @@ import { DashboardTabs } from "@/components/dashboard/DashboardTabs";
 import { syncCampaignsToSupabase } from "@/integrations/amazon/api";
 import { generateOptimizationSuggestion } from "@/integrations/gemini/api";
 import BasicChart from "@/components/metrics/BasicChart";
-import Link from 'next/link';
+import { Link } from 'react-router-dom';
 import { DashboardSidebar } from "@/components/DashboardSidebar";
 
 const Dashboard = () => {
