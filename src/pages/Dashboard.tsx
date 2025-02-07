@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { DataImport } from "@/components/DataImport";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -7,10 +8,10 @@ import { AmazonMetricsDisplay } from "@/components/AmazonMetricsDisplay";
 import { calculateMetrics } from "@/utils/amazonMetrics";
 import { DashboardFilters } from "@/components/dashboard/DashboardFilters";
 import { DashboardTabs } from "@/components/dashboard/DashboardTabs";
-import { syncCampaignsToSupabase } from "@/integrations/amazon/api";
-import { generateOptimizationSuggestion } from "@/integrations/gemini/api";
-import BasicChart from "@/components/metrics/BasicChart";
-import { Link } from 'react-router-dom';
+import { KPISection } from "@/components/metrics/KPISection";
+import { TACOSChart } from "@/components/metrics/TACOSChart";
+import { KeywordRankingTable } from "@/components/metrics/KeywordRankingTable";
+import { WorkspaceIntegration } from "@/components/google/WorkspaceIntegration";
 import { DashboardSidebar } from "@/components/DashboardSidebar";
 
 const Dashboard = () => {
@@ -20,21 +21,6 @@ const Dashboard = () => {
     category: "all"
   });
 
-  const handleSyncClick = async () => {
-    await syncCampaignsToSupabase();
-  };
-
-  const handleOptimizeClick = async () => {
-    // Placeholder for Gemini API call
-    try {
-      // const suggestion = await generateOptimizationSuggestion("Suggest keywords for my campaign");
-      // console.log("Gemini Suggestion:", suggestion);
-      console.log("Gemini optimization triggered");
-    } catch (error) {
-      console.error("Error generating optimization suggestion:", error);
-    }
-  };
-  
   // Fetch metrics data from Supabase with filters
   const { data: metricsData, isLoading } = useQuery({
     queryKey: ['metrics', filters],
@@ -65,35 +51,57 @@ const Dashboard = () => {
     }
   });
 
+  // Sample data for components
+  const sampleTacosData = [
+    { date: '2024-01', acos: 15, tacos: 20 },
+    { date: '2024-02', acos: 12, tacos: 18 },
+    { date: '2024-03', acos: 18, tacos: 22 },
+    // Add more sample data as needed
+  ];
+
+  const sampleKeywordRankings = [
+    { keyword: 'amazon seller', rank: 1, previousRank: 2, searchVolume: 10000, change: 1 },
+    { keyword: 'fba tools', rank: 3, previousRank: 5, searchVolume: 5000, change: 2 },
+    // Add more sample data as needed
+  ];
+
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-gray-50">
         <DashboardSidebar />
-        <main className="flex-1 p-8">
-          <div className="max-y-8">
-            <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
-            <button onClick={handleSyncClick} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4">
-              Sync Campaigns
-            </button>
-            <button onClick={handleOptimizeClick} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ml-2 mb-4">
-              Optimize
-            </button>
-            <BasicChart
-              labels={["Jan", "Feb", "Mar", "Apr", "May"]}
-              data={[10, 20, 15, 25, 30]}
-              title="Sample Data"
-            />
-            <DashboardFilters
-              onFilterChange={setFilters}
-            />
+        <main className="flex-1 p-8 space-y-6">
+          <div className="space-y-6">
+            <h1 className="text-2xl font-bold">Dashboard</h1>
+            
+            <DashboardFilters onFilterChange={setFilters} />
 
             {isLoading ? (
               <div className="flex items-center justify-center h-64">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
               </div>
             ) : metricsData ? (
-              <div className="space-y-8">
+              <div className="space-y-6">
+                {/* KPI Section */}
+                <KPISection
+                  totalSales={metricsData.totalSales || 0}
+                  totalOrders={metricsData.totalOrders || 0}
+                  roas={metricsData.roas || 0}
+                  conversionRate={metricsData.conversionRate || 0}
+                />
+
+                {/* TACOS Analysis */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <TACOSChart data={sampleTacosData} />
+                  <KeywordRankingTable rankings={sampleKeywordRankings} />
+                </div>
+
+                {/* Google Workspace Integration */}
+                <WorkspaceIntegration />
+
+                {/* Extended Metrics Display */}
                 <AmazonMetricsDisplay metrics={metricsData} />
+                
+                {/* Dashboard Tabs for Additional Analysis */}
                 <DashboardTabs />
               </div>
             ) : (
