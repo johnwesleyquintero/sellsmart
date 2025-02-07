@@ -1,6 +1,5 @@
 import { DashboardMenuItem } from "./ui/DashboardMenuItem";
 import { DashboardGroupLabel } from "./ui/DashboardGroupLabel";
-
 import { useLocation, useNavigate } from "react-router-dom";
 import { Home, BarChart2, Target, History, Database, Settings } from "lucide-react";
 import {
@@ -11,11 +10,10 @@ import {
   SidebarMenu,
 } from "@/components/ui/sidebar";
 import { LucideIcon } from "lucide-react";
-import { ReactNode } from "react";
 
 type NavigationItem = {
   title: string;
-  icon: LucideIcon | ReactNode;
+  icon: LucideIcon;
   path: string;
   description: string;
 };
@@ -64,15 +62,18 @@ export function DashboardSidebar() {
           <DashboardGroupLabel label="Analytics" />
           <SidebarGroupContent>
             <SidebarMenu>
-              {navigationItems.map((item) => (
-                <DashboardMenuItem
-                  key={item.title}
-                  title={item.title}
-                  icon={typeof item.icon === 'function' ? <item.icon /> : item.icon}
-                  path={item.path}
-                  description={item.description}
-                />
-              ))}
+              {navigationItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <DashboardMenuItem
+                    key={item.title}
+                    title={item.title}
+                    icon={<Icon className="w-4 h-4" />}
+                    path={item.path}
+                    description={item.description}
+                  />
+                );
+              })}
               <DashboardMenuItem
                 key="settings"
                 title="Settings"
