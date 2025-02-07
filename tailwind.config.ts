@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -26,9 +27,9 @@ export default {
         foreground: "hsl(var(--foreground))",
         spotify: {
           green: "#1ED760",
-          dark: "#FFFFFF", // Changed to white
-          darker: "#FFFFFF", // Changed to white
-          light: "#FFFFFF", // Changed to white
+          dark: "#121212",
+          darker: "#030303",
+          light: "#282828",
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",
@@ -58,9 +59,6 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-      },
-      fontFamily: {
-        spotify: ['Circular Std', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
       },
       borderRadius: {
         lg: "var(--radius)",
