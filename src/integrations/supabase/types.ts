@@ -480,6 +480,30 @@ export type Database = {
         }
         Relationships: []
       }
+      roles: {
+        Row: {
+          created_at: string
+          id: number
+          role: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: never
+          role: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: never
+          role?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       sales_data: {
         Row: {
           ad_clicks: number
