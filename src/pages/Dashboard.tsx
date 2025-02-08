@@ -56,13 +56,11 @@ const Dashboard = () => {
     { date: '2024-01', acos: 15, tacos: 20 },
     { date: '2024-02', acos: 12, tacos: 18 },
     { date: '2024-03', acos: 18, tacos: 22 },
-    // Add more sample data as needed
   ];
 
   const sampleKeywordRankings = [
     { keyword: 'amazon seller', rank: 1, previousRank: 2, searchVolume: 10000, change: 1 },
     { keyword: 'fba tools', rank: 3, previousRank: 5, searchVolume: 5000, change: 2 },
-    // Add more sample data as needed
   ];
 
   return (
@@ -83,10 +81,10 @@ const Dashboard = () => {
               <div className="space-y-6">
                 {/* KPI Section */}
                 <KPISection
-                  totalSales={metricsData.totalSales || 0}
-                  totalOrders={metricsData.totalOrders || 0}
-                  roas={metricsData.roas || 0}
-                  conversionRate={metricsData.conversionRate || 0}
+                  totalSales={metricsData.sales?.totalSales || 0}
+                  totalOrders={metricsData.sales?.totalOrders || 0}
+                  roas={metricsData.performance?.roas || 0}
+                  conversionRate={metricsData.performance?.conversionRate || 0}
                 />
 
                 {/* TACOS Analysis */}
