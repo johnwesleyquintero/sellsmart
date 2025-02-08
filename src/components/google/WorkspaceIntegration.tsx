@@ -28,7 +28,7 @@ export function WorkspaceIntegration() {
         .from('google_workspace_settings')
         .select('*')
         .eq('user_id', user.id)
-        .maybeSingle(); // Changed from .single() to .maybeSingle()
+        .maybeSingle();
 
       if (error) throw error;
       return data;
@@ -50,14 +50,21 @@ export function WorkspaceIntegration() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
 
+      // Use upsert operation
       const { error } = await supabase
         .from('google_workspace_settings')
-        .upsert({
-          user_id: user.id,
-          spreadsheet_id: spreadsheetId,
-          sheet_name: sheetName,
-          auto_sync: autoSync,
-        });
+        .upsert(
+          {
+            user_id: user.id,
+            spreadsheet_id: spreadsheetId,
+            sheet_name: sheetName,
+            auto_sync: autoSync,
+          },
+          {
+            onConflict: 'user_id',
+            ignoreDuplicates: false
+          }
+        );
 
       if (error) throw error;
     },
