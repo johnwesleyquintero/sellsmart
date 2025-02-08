@@ -28,7 +28,7 @@ export function WorkspaceIntegration() {
         .from('google_workspace_settings')
         .select('*')
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle(); // Changed from .single() to .maybeSingle()
 
       if (error) throw error;
       return data;
@@ -99,21 +99,29 @@ export function WorkspaceIntegration() {
 
     setIsLoading(true);
     try {
-      const csvUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=csv`;
-      const response = await fetch(csvUrl);
+      // First check if the sheet is publicly accessible
+      const response = await fetch(`https://docs.google.com/spreadsheets/d/${spreadsheetId}/edit`);
       
       if (!response.ok) {
-        throw new Error('Failed to access spreadsheet. Make sure it\'s publicly accessible.');
+        throw new Error('Unable to access the spreadsheet. Please make sure it\'s publicly accessible (View access) and try again.');
+      }
+
+      // Try to fetch the CSV
+      const csvUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=csv`;
+      const csvResponse = await fetch(csvUrl);
+      
+      if (!csvResponse.ok) {
+        throw new Error('Failed to access spreadsheet data. Please ensure the sheet is publicly accessible.');
       }
 
       toast({
         title: "Connection successful",
-        description: "Successfully connected to Google Sheets"
+        description: "Successfully connected to Google Sheets. The sheet is publicly accessible."
       });
     } catch (error) {
       toast({
         title: "Connection failed",
-        description: error instanceof Error ? error.message : "Failed to connect to Google Sheets",
+        description: error instanceof Error ? error.message : "Failed to connect to Google Sheets. Make sure the sheet is publicly accessible.",
         variant: "destructive"
       });
     } finally {
@@ -143,6 +151,9 @@ export function WorkspaceIntegration() {
               value={spreadsheetId ? `https://docs.google.com/spreadsheets/d/${spreadsheetId}` : ''}
               onChange={(e) => handleSheetUrlChange(e.target.value)}
             />
+            <p className="text-sm text-muted-foreground">
+              Make sure your Google Sheet is publicly accessible (Anyone with the link can view)
+            </p>
           </div>
           
           <div className="space-y-2">
