@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Database } from 'lucide-react';
 import { useGoogleWorkspaceSettings } from '@/hooks/useGoogleWorkspaceSettings';
 import { GoogleWorkspaceSettingsForm } from './GoogleWorkspaceSettingsForm';
+import { GoogleWorkspaceErrorBoundary } from './GoogleWorkspaceErrorBoundary';
 
 export function WorkspaceIntegration() {
   const { settings, saveMutation } = useGoogleWorkspaceSettings();
@@ -28,25 +29,27 @@ export function WorkspaceIntegration() {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Database className="h-5 w-5" />
-          Google Workspace Integration
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <GoogleWorkspaceSettingsForm
-          spreadsheetId={spreadsheetId}
-          sheetName={sheetName}
-          autoSync={autoSync}
-          onSpreadsheetIdChange={setSpreadsheetId}
-          onSheetNameChange={setSheetName}
-          onAutoSyncChange={setAutoSync}
-          onSave={handleSaveSettings}
-          isLoading={saveMutation.isPending}
-        />
-      </CardContent>
-    </Card>
+    <GoogleWorkspaceErrorBoundary>
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Database className="h-5 w-5" />
+            Google Workspace Integration
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <GoogleWorkspaceSettingsForm
+            spreadsheetId={spreadsheetId}
+            sheetName={sheetName}
+            autoSync={autoSync}
+            onSpreadsheetIdChange={setSpreadsheetId}
+            onSheetNameChange={setSheetName}
+            onAutoSyncChange={setAutoSync}
+            onSave={handleSaveSettings}
+            isLoading={saveMutation.isPending}
+          />
+        </CardContent>
+      </Card>
+    </GoogleWorkspaceErrorBoundary>
   );
 }
