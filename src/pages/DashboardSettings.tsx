@@ -68,7 +68,17 @@ const DashboardSettings = () => {
       }
 
       if (data) {
-        form.reset(data);
+        // Transform the data to match the expected form schema
+        const formattedData: SettingsFormValues = {
+          default_date_range: data.default_date_range as '1d' | '7d' | '30d' | '90d',
+          default_currency: data.default_currency as 'USD' | 'EUR' | 'GBP',
+          notification_preferences: data.notification_preferences as {
+            email: boolean;
+            in_app: boolean;
+          },
+          theme: data.theme as 'light' | 'dark' | 'system',
+        };
+        form.reset(formattedData);
       }
     };
 
