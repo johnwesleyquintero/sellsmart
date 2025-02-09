@@ -1,11 +1,15 @@
 
 import React from 'react';
-import { Outlet } from 'react-router-dom';
 import { DashboardSidebar } from '../DashboardSidebar';
 import { useAuth } from '@/components/AuthProvider';
 import { Loader2 } from 'lucide-react';
+import { SidebarProvider } from '@/components/ui/sidebar';
 
-export function DashboardLayout() {
+interface DashboardLayoutProps {
+  children: React.ReactNode;
+}
+
+export function DashboardLayout({ children }: DashboardLayoutProps) {
   const { isLoading } = useAuth();
 
   if (isLoading) {
@@ -17,11 +21,13 @@ export function DashboardLayout() {
   }
 
   return (
-    <div className="flex min-h-screen bg-background">
-      <DashboardSidebar />
-      <main className="flex-1 overflow-y-auto p-8">
-        <Outlet />
-      </main>
-    </div>
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full bg-gray-50">
+        <DashboardSidebar />
+        <main className="flex-1 p-8">
+          {children}
+        </main>
+      </div>
+    </SidebarProvider>
   );
 }

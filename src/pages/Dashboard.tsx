@@ -12,7 +12,7 @@ import { KPISection } from "@/components/metrics/KPISection";
 import { TACOSChart } from "@/components/metrics/TACOSChart";
 import { KeywordRankingTable } from "@/components/metrics/KeywordRankingTable";
 import { WorkspaceIntegration } from "@/components/google/WorkspaceIntegration";
-import { DashboardSidebar } from "@/components/DashboardSidebar";
+import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 
 const Dashboard = () => {
   const [filters, setFilters] = useState({
@@ -21,7 +21,6 @@ const Dashboard = () => {
     category: "all"
   });
 
-  // Fetch real metrics data from amazon_ads_metrics table
   const { data: metricsData, isLoading } = useQuery({
     queryKey: ['metrics', filters],
     queryFn: async () => {
@@ -83,56 +82,46 @@ const Dashboard = () => {
   });
 
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-gray-50">
-        <DashboardSidebar />
-        <main className="flex-1 p-8 space-y-6">
-          <div className="space-y-6">
-            <h1 className="text-2xl font-bold">Dashboard</h1>
-            
-            <DashboardFilters onFilterChange={setFilters} />
+    <DashboardLayout>
+      <div className="space-y-6">
+        <h1 className="text-2xl font-bold">Dashboard</h1>
+        
+        <DashboardFilters onFilterChange={setFilters} />
 
-            {isLoading ? (
-              <div className="flex items-center justify-center h-64">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-              </div>
-            ) : metricsData?.metrics ? (
-              <div className="space-y-6">
-                {/* KPI Section with real data */}
-                <KPISection
-                  totalSales={metricsData.metrics.sales?.totalSales || 0}
-                  totalOrders={metricsData.metrics.sales?.totalOrders || 0}
-                  roas={metricsData.metrics.performance?.roas || 0}
-                  conversionRate={metricsData.metrics.performance?.conversionRate || 0}
-                />
-
-                {/* TACOS Analysis with real data */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <TACOSChart data={metricsData.tacosData} />
-                  <KeywordRankingTable rankings={metricsData.keywordRankings} />
-                </div>
-
-                {/* Google Workspace Integration */}
-                <WorkspaceIntegration />
-
-                {/* Extended Metrics Display */}
-                <AmazonMetricsDisplay metrics={metricsData.metrics} />
-                
-                {/* Dashboard Tabs */}
-                <DashboardTabs />
-              </div>
-            ) : (
-              <div className="text-center py-8">
-                <p className="text-gray-600">No data available. Import your Amazon Ads data to get started.</p>
-                <div className="mt-4">
-                  <DataImport />
-                </div>
-              </div>
-            )}
+        {isLoading ? (
+          <div className="flex items-center justify-center h-64">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
           </div>
-        </main>
+        ) : metricsData?.metrics ? (
+          <div className="space-y-6">
+            <KPISection
+              totalSales={metricsData.metrics.sales?.totalSales || 0}
+              totalOrders={metricsData.metrics.sales?.totalOrders || 0}
+              roas={metricsData.metrics.performance?.roas || 0}
+              conversionRate={metricsData.metrics.performance?.conversionRate || 0}
+            />
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <TACOSChart data={metricsData.tacosData} />
+              <KeywordRankingTable rankings={metricsData.keywordRankings} />
+            </div>
+
+            <WorkspaceIntegration />
+
+            <AmazonMetricsDisplay metrics={metricsData.metrics} />
+            
+            <DashboardTabs />
+          </div>
+        ) : (
+          <div className="text-center py-8">
+            <p className="text-gray-600">No data available. Import your Amazon Ads data to get started.</p>
+            <div className="mt-4">
+              <DataImport />
+            </div>
+          </div>
+        )}
       </div>
-    </SidebarProvider>
+    </DashboardLayout>
   );
 };
 
