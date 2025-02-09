@@ -24,7 +24,7 @@ export function useSettings() {
         .from('dashboard_settings')
         .select('*')
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle();
 
       if (error) {
         console.error('Error loading settings:', error);
