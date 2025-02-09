@@ -405,6 +405,39 @@ export type Database = {
         }
         Relationships: []
       }
+      dashboard_settings: {
+        Row: {
+          created_at: string
+          default_currency: string
+          default_date_range: string
+          id: string
+          notification_preferences: Json | null
+          theme: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          default_currency?: string
+          default_date_range?: string
+          id?: string
+          notification_preferences?: Json | null
+          theme?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          default_currency?: string
+          default_date_range?: string
+          id?: string
+          notification_preferences?: Json | null
+          theme?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       google_workspace_settings: {
         Row: {
           auto_sync: boolean | null
