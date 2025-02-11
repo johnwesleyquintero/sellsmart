@@ -1,21 +1,42 @@
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { DashboardSidebar } from "@/components/DashboardSidebar";
+
+import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
+import { GoogleIntegrationSettings } from "@/components/settings/GoogleIntegrationSettings";
+import { useGoogleWorkspaceSettings } from "@/hooks/useGoogleWorkspaceSettings";
 import { DataImport } from "@/components/DataImport";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card } from "@/components/ui/card";
 
 const DashboardImport = () => {
+  const { settings, saveMutation } = useGoogleWorkspaceSettings();
+
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex bg-white">
-        <DashboardSidebar />
-        <main className="flex-1 p-8">
-          <div className="max-w-7xl mx-auto">
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">Import Amazon Ads</h1>
-            <p className="text-gray-500 mb-6">Import your advertising data from various sources.</p>
+    <DashboardLayout>
+      <div className="max-w-7xl mx-auto space-y-6">
+        <h1 className="text-2xl font-bold text-gray-900">Data Connections</h1>
+        <p className="text-gray-500">Configure your data sources and import options.</p>
+
+        <Tabs defaultValue="googlesheets" className="w-full">
+          <TabsList className="w-full">
+            <TabsTrigger value="googlesheets">Google Sheets</TabsTrigger>
+            <TabsTrigger value="csv">CSV Upload</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="googlesheets">
+            <Card className="p-6">
+              <GoogleIntegrationSettings
+                initialSettings={settings}
+                onSave={saveMutation.mutate}
+                isLoading={saveMutation.isPending}
+              />
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="csv">
             <DataImport />
-          </div>
-        </main>
+          </TabsContent>
+        </Tabs>
       </div>
-    </SidebarProvider>
+    </DashboardLayout>
   );
 };
 

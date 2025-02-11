@@ -24,7 +24,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-gray-50">
         <DashboardSidebar />
-        <main className="flex-1 p-8">
+        <main className="flex-1 p-8 overflow-auto">
           {children}
         </main>
       </div>

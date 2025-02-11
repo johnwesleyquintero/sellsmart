@@ -2,7 +2,7 @@
 import { DashboardMenuItem } from "./ui/DashboardMenuItem";
 import { DashboardGroupLabel } from "./ui/DashboardGroupLabel";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Home, BarChart2, Target, History, Database, Settings } from "lucide-react";
+import { Home, BarChart2, Target, History, Database, Settings, Link } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -49,6 +49,12 @@ const navigationItems: NavigationItem[] = [
     icon: Database,
     path: "/dashboard/dsp",
     description: "Demand-side platform management"
+  },
+  {
+    title: "Data Connections",
+    icon: Link,
+    path: "/dashboard/import",
+    description: "Configure data sources and imports"
   },
 ];
 
