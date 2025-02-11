@@ -1,134 +1,26 @@
+
 # ASYND: Amazon Advertising Analytics Dashboard
 
-- **Edit in StackBlitz:** [SellSmart on StackBlitz](https://stackblitz.com/~/github.com/johnwesleyquintero/sellsmart)  
-- **Lovable.dev Project:** [View on Lovable.dev](https://lovable.dev/projects/9fbb30c8-5bf2-49e7-bbb0-ee1fd35faceb?utm_source=gpt-engineer-badge)  
-- **GitHub Repository:** [SellSmart on GitHub](https://github.com/johnwesleyquintero/sellsmart?tab=readme-ov-file#asynd-amazon-advertising-analytics-dashboard)  
+A streamlined dashboard for Amazon Sellers to analyze their advertising data using CSV files or Google Sheets as data sources.
 
+## Core Features
 
-## Completed Features ✅
+### Data Import
+- CSV file upload support
+- Google Sheets integration
+- Bulk file processing from Amazon Advertising
 
-### Authentication & User Management
-- Supabase authentication integration
-- User profile management
-- Role-based access control
+### Analytics Dashboard
+- Key performance metrics (ACOS, ROAS, CTR)
+- Campaign performance analysis
+- Search term optimization
+- Historical data tracking
 
-### Dashboard Infrastructure
-- Responsive layout system
-- Dark theme implementation
-- Navigation structure
-- Basic metrics display
-
-### Data Management
-- Amazon Ads metrics table structure
-- Sales data tracking
-- Campaign targets system
-- Data import functionality
-
-### Analytics
-- Basic performance metrics
-- Campaign overview statistics
-- Historical data viewing
-- Initial charts and graphs
-
-### Integration
-- Chrome Extension
-- Google Workspace Integration (Settings Page)
-
-## Architecture Overview
-- Web Application (Next.js, Vercel)
-- Chrome Extension (Integrates with Amazon Seller Central)
-- Shared Backend (Supabase)
-
-## Key Features
-
-### Web Application
-- Dashboard
-- Google Workspace Integration
-- Advanced Analytics
-- User Management
-
-### Chrome Extension
-- Quick Access
-- Content Scripts
-- Real-Time Updates
-
-## In Progress 🚧
-
-### Campaign Management
-- Real-time SP/SD/SB campaign monitoring
-- Automated rule suggestions
-- Bid adjustment calculator
-
-### Analytics Enhancement
-- Advanced performance metrics
-- Custom report builder
-- Competitor benchmarking
-- Historical trend analysis
-
-### Creative Studio
-- Ad preview generator
-- AI-powered headline variations
-- Image optimization scoring
-
-## Pending Implementation 📋
-
-### Amazon API Integration
-- [ ] Amazon Advertising API connection
-- [ ] Rate limit monitoring
-- [ ] Webhook configuration
-- [ ] API usage analytics
-
-### Advanced Features
-- [ ] Automated bidding strategies
-- [ ] AI-powered optimization
-- [ ] Bulk action capabilities
-- [ ] Advanced search term analysis
-
-### Performance Optimization
-- [ ] Response time optimization
-- [ ] Data caching system
-- [ ] Real-time updates
-- [ ] Bulk processing optimization
-
-## Implementation Plan
-
-### Set Up the Project
-- Initialize the Next.js project
-- Install Dependencies
-- Set Up Supabase
-
-### Web Application
-- Frontend (React)
-- Backend (Next.js API Routes)
-
-### Chrome Extension
-- Manifest File
-- Content Scripts
-- Popup
-
-### Shared Backend (Supabase)
-- Database Schema
-- Real-Time Updates
-
-### Deployment
-- Web Application (Vercel)
-- Chrome Extension
-- Supabase
-
-### Beta Testing
-
-## Technical Stack
-
-### Frontend
-- React 18 + TypeScript
-- Tailwind CSS
-- Recharts for visualization
-- Tanstack Query
-
-### Backend
-- Supabase
-- PostgreSQL
-- Edge Functions
+### Data Processing
+- Data cleaning and aggregation
+- Metric calculations
+- Automated consolidation
+- Custom date range analysis
 
 ## Getting Started
 
@@ -137,15 +29,48 @@
 3. Set up environment variables
 4. Run development server: `npm run dev`
 
+## Data Import Methods
+
+### Google Sheets
+1. Export your Amazon Advertising data to Google Sheets
+2. Make the sheet publicly accessible (view only)
+3. Copy the Google Sheet URL
+4. Paste URL in the dashboard import section
+
+### CSV Upload
+1. Download your advertising reports from Amazon
+2. Clean the CSV file if needed
+3. Upload directly through the dashboard
+4. Data will be processed automatically
+
+## Metrics Calculated
+
+- ACOS (Advertising Cost of Sale)
+- ROAS (Return on Ad Spend)
+- CTR (Click-Through Rate)
+- Conversion Rate
+- Total Sales & Orders
+- Ad Spend & Impressions
+
+## Technology Stack
+
+- React + TypeScript
+- Tailwind CSS
+- Supabase (Database)
+- Vercel (Hosting)
+
+## Acknowledgements
+
+This project is made possible thanks to these amazing platforms:
+
+- [Vercel](https://vercel.com/) - Hosting and Deployment
+- [Lovable.dev](https://lovable.dev/) - Development Platform
+- [GitHub](https://github.com/) - Version Control
+- [Supabase](https://supabase.com/) - Backend Infrastructure
+
 ## Contributing
 
 Please read our contributing guidelines before submitting pull requests.
-
-## Tips for Success
-- Start Small
-- Test Early and Often
-- Document Everything
-- Engage with Users
 
 ## License
 
