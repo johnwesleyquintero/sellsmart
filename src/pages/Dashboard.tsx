@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { DataImport } from "@/components/DataImport";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -85,7 +84,7 @@ const Dashboard = () => {
               conversionRate={metricsData.metrics.performance?.conversionRate || 0}
             />
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
               <TACOSChart data={metricsData.tacosData} />
               <KeywordRankingTable rankings={metricsData.keywordRankings} />
             </div>

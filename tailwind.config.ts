@@ -21,11 +21,13 @@ export default {
       colors: {
         // 🌌 Nebula UI Theme Colors
         nebula: {
-          dark: "#0a0a0a", // Dark Background
-          purple: "#2d1b4d", // Deep Purple
-          teal: "#4fd1c5", // Bright Cyan
-          border: "#4b2e7a", // Purple Border
-          text: "#e0e0e0", // Light Grey
+          dark: "#0a0a0a", // Deep Black
+          purple: "#2d1b4d", // Core Nebula Purple
+          teal: "#4fd1c5", // Quantum Teal
+          glow: "#4b2e7a", // Event Horizon Glow
+          accent: "#8a6de9", // Lighter Accent Purple
+          highlight: "#c084fc", // Soft Glow Effect
+          text: "#e0e0e0", // Light Grey for Readability
         },
         
         // 🌈 Primary UI Colors (Supports HSL-based themes)
@@ -77,12 +79,17 @@ export default {
           "0%, 100%": { boxShadow: "0 0 10px #4fd1c5" },
           "50%": { boxShadow: "0 0 20px #2d1b4d" },
         },
+        "fade-in-up": {
+          from: { opacity: "0", transform: "translateY(10px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
       },
       animation: {
         "fade-in": "fade-in 0.3s ease-out",
         "neon-glow": "neon-glow 1.5s infinite alternate ease-in-out",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "fade-in-up": "fade-in-up 0.3s ease-out",
       },
     },
   },
