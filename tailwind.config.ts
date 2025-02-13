@@ -21,19 +21,13 @@ export default {
       colors: {
         // 🌌 Nebula UI Theme Colors
         nebula: {
-          dark: "#0a0a0a", // Background Core
-          purple: "#2d1b4d", // Primary Purple
-          teal: "#4fd1c5", // Quantum Teal
-          glow: "#4b2e7a", // Event Horizon Glow
-          text: "#e0e0e0", // Main Text Color
+          dark: "#0a0a0a", // Dark Background
+          purple: "#2d1b4d", // Deep Purple
+          teal: "#4fd1c5", // Bright Cyan
+          border: "#4b2e7a", // Purple Border
+          text: "#e0e0e0", // Light Grey
         },
-        // 🎵 Keep Existing Spotify Theme
-        spotify: {
-          green: "#1ED760",
-          dark: "#121212",
-          darker: "#030303",
-          light: "#282828",
-        },
+        
         // 🌈 Primary UI Colors (Supports HSL-based themes)
         primary: {
           DEFAULT: "hsl(var(--primary))",
@@ -63,6 +57,9 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+      },
+      backgroundImage: {
+        'gradient-text': 'linear-gradient(45deg, var(--quantum-teal), #8a6de9)',
       },
       // 🌟 Border Radius Adjustments
       borderRadius: {

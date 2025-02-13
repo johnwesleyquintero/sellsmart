@@ -1,42 +1,20 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --void-core: #0a0a0a;
+  --singularity-purple: #2d1b4d;
+  --quantum-teal: #4fd1c5;
+  --event-horizon: #4b2e7a;
+  --input-bg: rgba(20, 10, 25, 0.9);
+  --text-color: #e0e0e0;
+  --background-gradient: linear-gradient(135deg, #0a0a0a 0%, #1a102e 50%, #0a0a0a 100%);
+  --neon-glow: 0 0 15px var(--quantum-teal);
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+body {
+  color: var(--text-color);
+  background: var(--background-gradient);
+  font-family: 'Segoe UI', system-ui, sans-serif;
 }
