@@ -50,11 +50,7 @@ const Dashboard = () => {
       if (error) throw error;
 
       // Calculate TACoS data
-      const tacosData = metrics?.map(metric => ({
-        date: metric.date,
-        acos: metric.acos || 0,
-        tacos: ((metric.amount_spent || 0) / (metric.total_ad_sales || 1)) * 100
-      })) || [];
+      const tacosData = calculateTacosData(metrics);
 
       // Calculate keyword rankings
       const keywordData = metrics?.reduce((acc: any[], metric) => {
