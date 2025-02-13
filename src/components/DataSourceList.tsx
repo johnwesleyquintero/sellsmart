@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Plus, Edit, Trash2, Check, X } from "lucide-react";
@@ -32,7 +31,7 @@ export function DataSourceList() {
         .from('data_source_configs')
         .select('*')
         .order('created_at', { ascending: false });
-      
+
       if (error) throw error;
       return data as DataSource[];
     }
@@ -46,7 +45,7 @@ export function DataSourceList() {
         .eq('id', id);
 
       if (error) throw error;
-      
+
       toast.success(`Data source ${isActive ? 'activated' : 'deactivated'}`);
       refetch();
     } catch (error) {
@@ -62,7 +61,7 @@ export function DataSourceList() {
         .eq('id', id);
 
       if (error) throw error;
-      
+
       toast.success('Data source deleted');
       refetch();
     } catch (error) {
@@ -91,7 +90,7 @@ export function DataSourceList() {
         </TableHeader>
         <TableBody>
           {dataSources?.map((source) => (
-            <TableRow key={source.id}>
+            <TableRow key={source.id} className="hover:bg-gray-100">
               <TableCell>{source.name}</TableCell>
               <TableCell className="capitalize">{source.source_type}</TableCell>
               <TableCell>

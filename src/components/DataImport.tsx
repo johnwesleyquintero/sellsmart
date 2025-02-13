@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
@@ -20,19 +20,20 @@ export function DataImport() {
   const [importedData, setImportedData] = useState<any[]>([]);
   const [metrics, setMetrics] = useState<any>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
   const { toast } = useToast();
 
   const processAndUploadData = async (data: any[]) => {
     try {
       setIsUploading(true);
-      
+
       // Get current user
       const { data: { user } } = await supabase.auth.getUser();
-      
+
       if (!user) {
         throw new Error("You must be logged in to upload data");
       }
-      
+
       // Transform data to match database schema
       const transformedData = data.map(row => ({
         date: row.Date,
@@ -61,7 +62,7 @@ export function DataImport() {
       setImportedData(transformedData);
       const calculatedMetrics = calculateMetrics(transformedData);
       setMetrics(calculatedMetrics);
-      
+
       toast({
         title: "Data imported successfully",
         description: `${transformedData.length} rows processed and uploaded`,
@@ -78,18 +79,47 @@ export function DataImport() {
     }
   };
 
-  const handleCSVUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCSVUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      Papa.parse(file, {
-        complete: (results) => {
-          processAndUploadData(results.data);
-        },
-        header: true,
-        skipEmptyLines: true,
+    if (!file) return;
+
+    if (file.type !== "text/csv") {
+      toast({
+        title: "Invalid file type",
+        description: "Please upload a CSV file",
+        variant: "destructive",
       });
+      return;
     }
-  };
+
+    setFile(file);
+
+    Papa.parse(file, {
+      complete: (results) => {
+        processAndUploadData(results.data);
+      },
+      header: true,
+      skipEmptyLines: true,
+    });
+  }, [processAndUploadData, toast]);
+
+  const handleDrop = useCallback((event: React.DragEvent<HTMLLabelElement>) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files?.[0];
+    if (!file) return;
+
+    const fakeEvent = {
+      target: {
+        files: [file],
+      }
+    } as any;
+
+    handleCSVUpload(fakeEvent);
+  }, [handleCSVUpload]);
+
+  const handleDragOver = useCallback((event: React.DragEvent<HTMLLabelElement>) => {
+    event.preventDefault();
+  }, []);
 
   const handleGoogleSheetImport = (url: string) => {
     const sheetId = url.match(/spreadsheets\/d\/([a-zA-Z0-9-_]+)/)?.[1];
@@ -103,7 +133,7 @@ export function DataImport() {
     }
 
     const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv`;
-    
+
     fetch(csvUrl)
       .then(response => response.text())
       .then(data => {
@@ -135,24 +165,34 @@ export function DataImport() {
               <TabsTrigger value="csv">CSV Upload</TabsTrigger>
               <TabsTrigger value="sheets">Google Sheets</TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="csv">
               <div className="space-y-4">
                 <div className="flex items-center justify-center w-full">
                   <label
                     htmlFor="csv-upload"
                     className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-600 border-dashed rounded-lg cursor-pointer hover:bg-spotify-darker/50 relative"
+                    onDrop={handleDrop}
+                    onDragOver={handleDragOver}
                   >
                     <div className="flex flex-col items-center justify-center pt-5 pb-6">
                       {isUploading ? (
                         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
                       ) : (
                         <>
-                          <FileSpreadsheet className="w-8 h-8 mb-2 text-gray-400" />
-                          <p className="mb-2 text-sm text-gray-400">
-                            <span className="font-semibold">Click to upload</span> or drag and drop
-                          </p>
-                          <p className="text-xs text-gray-400">CSV files only</p>
+                          {file ? (
+                            <p className="mb-2 text-sm text-gray-400">
+                              {file.name}
+                            </p>
+                          ) : (
+                            <>
+                              <FileSpreadsheet className="w-8 h-8 mb-2 text-gray-400" />
+                              <p className="mb-2 text-sm text-gray-400">
+                                <span className="font-semibold">Click to upload</span> or drag and drop
+                              </p>
+                              <p className="text-xs text-gray-400">CSV files only</p>
+                            </>
+                          )}
                         </>
                       )}
                     </div>
@@ -168,7 +208,7 @@ export function DataImport() {
                 </div>
               </div>
             </TabsContent>
-            
+
             <TabsContent value="sheets">
               <div className="space-y-4">
                 <div className="flex gap-2">
