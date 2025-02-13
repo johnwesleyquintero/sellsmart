@@ -62,7 +62,7 @@ export function DataImport() {
       setImportedData(transformedData);
       const calculatedMetrics = calculateMetrics(transformedData);
       setMetrics(calculatedMetrics);
-
+      
       toast({
         title: "Data imported successfully",
         description: `${transformedData.length} rows processed and uploaded`,
@@ -80,10 +80,10 @@ export function DataImport() {
   };
 
   const handleCSVUpload = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+    const selectedFile = event.target.files?.[0];
+    if (!selectedFile) return;
 
-    if (file.type !== "text/csv") {
+    if (selectedFile.type !== "text/csv") {
       toast({
         title: "Invalid file type",
         description: "Please upload a CSV file",
@@ -92,31 +92,29 @@ export function DataImport() {
       return;
     }
 
-    setFile(file);
+    setFile(selectedFile);
 
-    Papa.parse(file, {
+    Papa.parse(selectedFile, {
       complete: (results) => {
         processAndUploadData(results.data);
-      },
+      }, 
       header: true,
       skipEmptyLines: true,
     });
   }, [processAndUploadData, toast]);
-
+  
   const handleDrop = useCallback((event: React.DragEvent<HTMLLabelElement>) => {
     event.preventDefault();
-    const file = event.dataTransfer.files?.[0];
-    if (!file) return;
-
+    const droppedFile = event.dataTransfer.files?.[0];
     const fakeEvent = {
       target: {
-        files: [file],
+        files: [droppedFile],
       }
     } as any;
 
     handleCSVUpload(fakeEvent);
   }, [handleCSVUpload]);
-
+  
   const handleDragOver = useCallback((event: React.DragEvent<HTMLLabelElement>) => {
     event.preventDefault();
   }, []);
@@ -156,7 +154,7 @@ export function DataImport() {
         <CardHeader>
           <CardTitle>Import Amazon Ads Data</CardTitle>
           <CardDescription className="text-gray-400">
-            Import your advertising data from various sources
+            Import your advertising data from various sources 
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -165,7 +163,7 @@ export function DataImport() {
               <TabsTrigger value="csv">CSV Upload</TabsTrigger>
               <TabsTrigger value="sheets">Google Sheets</TabsTrigger>
             </TabsList>
-
+            
             <TabsContent value="csv">
               <div className="space-y-4">
                 <div className="flex items-center justify-center w-full">
@@ -175,7 +173,7 @@ export function DataImport() {
                     onDrop={handleDrop}
                     onDragOver={handleDragOver}
                   >
-                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                    <div className="flex flex-col items-center justify-center pt-5 pb-6"> 
                       {isUploading ? (
                         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
                       ) : (
@@ -204,7 +202,7 @@ export function DataImport() {
                       onChange={handleCSVUpload}
                       disabled={isUploading}
                     />
-                  </label>
+                  </label> 
                 </div>
               </div>
             </TabsContent>
@@ -212,7 +210,7 @@ export function DataImport() {
             <TabsContent value="sheets">
               <div className="space-y-4">
                 <div className="flex gap-2">
-                  <Input
+                  <Input 
                     type="url"
                     placeholder="Paste Google Sheets URL"
                     className="flex-1 bg-spotify-darker border-gray-700"
@@ -232,7 +230,7 @@ export function DataImport() {
                 </p>
               </div>
             </TabsContent>
-          </Tabs>
+          </Tabs> 
         </CardContent>
       </Card>
 
@@ -240,14 +238,14 @@ export function DataImport() {
         <AmazonMetricsDisplay metrics={metrics} />
       )}
 
-      {importedData.length > 0 && (
+      {importedData.length > 0 && ( 
         <Card className="bg-spotify-light text-white">
           <CardHeader>
             <CardTitle>Raw Data Preview</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+              <table className="w-full text-sm"> 
                 <thead>
                   <tr>
                     {Object.keys(importedData[0]).map((header) => (
@@ -260,19 +258,19 @@ export function DataImport() {
                 <tbody>
                   {importedData.slice(0, 5).map((row, index) => (
                     <tr key={index}>
-                      {Object.values(row).map((cell: any, cellIndex) => (
+                      {Object.values(row).map((cell: any, cellIndex) => ( 
                         <td key={cellIndex} className="px-4 py-2 border-b border-gray-700">
                           {cell}
                         </td>
                       ))}
                     </tr>
                   ))}
-                </tbody>
+                </tbody> 
               </table>
             </div>
             {importedData.length > 5 && (
               <p className="text-sm text-gray-400 mt-2">
-                Showing first 5 rows of {importedData.length} total rows
+                Showing first 5 rows of {importedData.length} total rows 
               </p>
             )}
           </CardContent>
