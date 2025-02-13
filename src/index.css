@@ -64,13 +64,25 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 224.3 76.3% 48%;
   }
+  :root {
+    --void-core: #0a0a0a;
+    --singularity-purple: #2d1b4d;
+    --quantum-teal: #4fd1c5;
+    --event-horizon: #4b2e7a;
+    --input-bg: rgba(20, 10, 25, 0.9);
+    --text-color: #e0e0e0;
+    --background-gradient: linear-gradient(135deg, #0a0a0a 0%, #1a102e 50%, #0a0a0a 100%);
+    --neon-glow: 0 0 15px var(--quantum-teal);
+  }
 }
- 
+
 @layer base {
   * {
     @apply border;
   }
   body {
-    @apply bg-[--background] text-[--foreground];
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a102e 50%, #0a0a0a 100%);
+    color: var(--text-color);
+    font-family: 'Segoe UI', system-ui, sans-serif;
   }
 }

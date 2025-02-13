@@ -17,4 +17,5 @@ body {
   background: linear-gradient(135deg, #0a0a0a 0%, #1a102e 50%, #0a0a0a 100%);
   color: var(--text-color);
   font-family: 'Segoe UI', system-ui, sans-serif;
+  padding: 20px;
 }
