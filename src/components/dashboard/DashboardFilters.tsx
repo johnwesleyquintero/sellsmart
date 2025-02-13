@@ -25,18 +25,21 @@ interface DashboardFiltersProps {
 }
 
 export function DashboardFilters({ onFilterChange }: DashboardFiltersProps) {
-  const [date, setDate] = useState<Date>();
-  const [marketplace, setMarketplace] = useState("all");
-  const [category, setCategory] = useState("all");
+  const [filters, setFilters] = useState({
+    dateRange: "all",
+    marketplace: "all",
+    category: "all",
+  });
 
   const handleFilterChange = (key: string, value: string) => {
-    const newFilters = {
-      dateRange: date ? format(date, "yyyy-MM-dd") : "all",
-      marketplace,
-      category,
+    setFilters({
+      ...filters,
       [key]: value,
-    };
-    onFilterChange(newFilters);
+    });
+    onFilterChange({
+      ...filters,
+      [key]: value,
+    });
   };
 
   return (
@@ -45,15 +48,14 @@ export function DashboardFilters({ onFilterChange }: DashboardFiltersProps) {
         <PopoverTrigger asChild>
           <Button variant="outline" className="w-[240px] justify-start">
             <CalendarIcon className="mr-2 h-4 w-4" />
-            {date ? format(date, "PPP") : "Pick a date"}
+            {filters.dateRange === "all" ? "Pick a date" : format(new Date(filters.dateRange), "PPP")}
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
           <Calendar
             mode="single"
-            selected={date}
+            selected={filters.dateRange === "all" ? undefined : new Date(filters.dateRange)}
             onSelect={(newDate) => {
-              setDate(newDate);
               if (newDate) {
                 handleFilterChange("dateRange", format(newDate, "yyyy-MM-dd"));
               }
@@ -64,9 +66,8 @@ export function DashboardFilters({ onFilterChange }: DashboardFiltersProps) {
       </Popover>
 
       <Select
-        value={marketplace}
+        value={filters.marketplace}
         onValueChange={(value) => {
-          setMarketplace(value);
           handleFilterChange("marketplace", value);
         }}
       >
@@ -83,9 +84,8 @@ export function DashboardFilters({ onFilterChange }: DashboardFiltersProps) {
       </Select>
 
       <Select
-        value={category}
+        value={filters.category}
         onValueChange={(value) => {
-          setCategory(value);
           handleFilterChange("category", value);
         }}
       >

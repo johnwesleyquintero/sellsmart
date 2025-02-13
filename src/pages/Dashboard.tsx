@@ -5,6 +5,8 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { AmazonMetricsDisplay } from "@/components/AmazonMetricsDisplay";
+import { calculateTacosData } from '@/utils/tacos';
+import { calculateKeywordRankings } from '@/utils/keywordRankings';
 import { calculateMetrics } from "@/utils/amazonMetrics";
 import { DashboardFilters } from "@/components/dashboard/DashboardFilters";
 import { DashboardTabs } from "@/components/dashboard/DashboardTabs";
@@ -53,21 +55,7 @@ const Dashboard = () => {
       const tacosData = calculateTacosData(metrics);
 
       // Calculate keyword rankings
-      const keywordData = metrics?.reduce((acc: any[], metric) => {
-        if (metric.keyword && metric.impressions) {
-          const existing = acc.find(k => k.keyword === metric.keyword);
-          if (!existing) {
-            acc.push({
-              keyword: metric.keyword,
-              rank: acc.length + 1,
-              previousRank: acc.length + 2,
-              searchVolume: metric.impressions,
-              change: 1
-            });
-          }
-        }
-        return acc;
-      }, []).slice(0, 10) || [];
+      const keywordData = calculateKeywordRankings(metrics);
 
       return {
         metrics: calculateMetrics(metrics || []),
