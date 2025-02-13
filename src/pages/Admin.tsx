@@ -10,12 +10,19 @@ import { Key, Users } from "lucide-react";
 const Admin = () => {
   return (
     <SidebarProvider>
-      <div className="flex h-screen bg-white">
-        <DashboardSidebar />
-        <div className="flex-1 overflow-auto p-8">
+      <div className="min-h-screen flex bg-gray-50 dark:bg-background">
+        <header className="bg-gradient-to-r from-primary to-secondary text-foreground p-4">
+          <h1 className="text-xl font-bold">My Glorious Admin Panel</h1>
+        </header>
+
+        <aside className="w-sidebar bg-white dark:bg-gray-900 p-4 border-r border-gray-200 dark:border-gray-700">
+          <DashboardSidebar />
+        </aside>
+        <main className="flex-1 p-6">
+        
           <div className="mb-8">
-            <h1 className="text-4xl font-bold text-black mb-2 font-spotify">Admin Dashboard</h1>
-            <p className="text-gray-600">Manage API keys and users</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-foreground">Admin Dashboard</h1>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">Manage API keys and users</p>
           </div>
 
           <Tabs defaultValue="api-keys" className="space-y-6">
@@ -38,7 +45,7 @@ const Admin = () => {
               <UserManagement />
             </TabsContent>
           </Tabs>
-        </div>
+        </main>
       </div>
     </SidebarProvider>
   );
