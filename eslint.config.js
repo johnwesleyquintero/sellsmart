@@ -5,6 +5,8 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 import jestPlugin from "eslint-plugin-jest";
 import prettierConfig from "eslint-config-prettier";
+import importPlugin from "eslint-plugin-import";
+import unicorn from "eslint-plugin-unicorn";
 
 export default tseslint.config(
   { ignores: ["dist", "coverage"] },
@@ -17,6 +19,7 @@ export default tseslint.config(
     files: ["**/*.{ts,tsx}"],
     languageOptions: {
       ecmaVersion: 2020,
+      sourceType: "module",
       globals: {
         ...globals.browser,
         ...globals.jest,
@@ -26,6 +29,8 @@ export default tseslint.config(
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
       jest: jestPlugin,
+      import: importPlugin,
+      unicorn: unicorn,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
@@ -40,6 +45,38 @@ export default tseslint.config(
       "jest/no-focused-tests": "error",
       "jest/no-identical-title": "error",
       "jest/valid-expect": "error",
+      
+      // Additional God Mode rules for ultimate code supremacy
+      "no-console": "warn",
+      "no-debugger": "error",
+      "prefer-const": "error",
+      curly: "error",
+      eqeqeq: ["error", "always"],
+      "consistent-return": "error",
+      "import/order": [
+        "error",
+        { 
+          groups: [
+            "builtin", 
+            "external", 
+            "internal", 
+            "parent", 
+            "sibling", 
+            "index"
+          ],
+          "newlines-between": "always"
+        }
+      ],
+      "unicorn/prefer-string-starts-ends-with": "error",
+      "unicorn/filename-case": [
+        "error",
+        {
+          cases: {
+            kebabCase: true,
+            pascalCase: true
+          }
+        }
+      ]
     },
   }
 );

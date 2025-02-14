@@ -15,6 +15,8 @@
     "allowJs": true,
     "noUnusedLocals": false,
     "strictNullChecks": false,
-    "moduleResolution": "bundler"
+    "moduleResolution": "bundler",
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true
   }
 }

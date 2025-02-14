@@ -11,6 +11,7 @@ const config: Config.InitialOptions = {
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
   },
+  transformIgnorePatterns: ['/node_modules/'], // Exclude node_modules from transformation
   coverageDirectory: 'coverage',
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
@@ -18,10 +19,23 @@ const config: Config.InitialOptions = {
     '!src/main.tsx',
     '!src/vite-env.d.ts',
   ],
-  testMatch: ['<rootDir>/src/**/__tests__/**/*.{ts,tsx}', '<rootDir>/src/**/*.{spec,test}.{ts,tsx}'],
+  testMatch: [
+    '<rootDir>/src/**/__tests__/**/*.{ts,tsx}',
+    '<rootDir>/src/**/*.{spec,test}.{ts,tsx}',
+  ],
   globals: {
     'ts-jest': {
       tsconfig: 'tsconfig.json',
+    },
+  },
+  clearMocks: true, // Clear mock calls between tests for a pristine testing arena
+  verbose: true,    // Unleash detailed logs to track every heroic test outcome
+  coverageThreshold: {
+    global: {
+      branches: 80,
+      functions: 80,
+      lines: 80,
+      statements: 80,
     },
   },
 };

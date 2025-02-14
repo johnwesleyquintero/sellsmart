@@ -4,6 +4,7 @@
     "lib": ["ES2023"],
     "module": "ESNext",
     "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,  // Ensure file names are consistent across your realm
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -12,11 +13,18 @@
     "moduleDetection": "force",
     "noEmit": true,
 
-    /* Linting */
+    /* Linting & Strictness */
     "strict": true,
+    "noImplicitReturns": true,       // Every code path must return—no loose ends in our saga
+    "noImplicitThis": true,          // Ban rogue 'this' references from our chronicles
+    "useUnknownInCatchVariables": true, // Embrace safer error handling
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    /* Optional Enhancements */
+    "resolveJsonModule": true,       // Allow cosmic JSON imports
+    "exactOptionalPropertyTypes": true // Enforce exact types for optional properties
   },
   "include": ["vite.config.ts"]
 }
