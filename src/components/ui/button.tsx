@@ -10,6 +10,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: "bg-[var(--quantum-teal)] text-[var(--void-core)] hover:bg-[var(--quantum-teal)]/90",
+        nebula: "nebula-button",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
@@ -44,6 +45,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const Comp = asChild ? Slot : "button"
     return (
       <Comp
+        aria-label={props["aria-label"]}
+        aria-disabled={props.disabled}
         className={cn(buttonVariants({ variant, size, className }), className, "animate-fade-in-up")}
         ref={ref}
         {...props}
