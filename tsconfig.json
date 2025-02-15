@@ -17,6 +17,7 @@
     "strictNullChecks": false,
     "moduleResolution": "bundler",
     "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "module": "esnext"
   }
 }

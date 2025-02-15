@@ -4,6 +4,15 @@
 
 @layer base {
   :root {
+    --void-core: #0a0a0a;
+    --singularity-purple: #2d1b4d;
+    --quantum-teal: #4fd1c5;
+    --event-horizon: #4b2e7a;
+    --input-bg: rgba(20, 10, 25, 0.9);
+    --text-color: #e0e0e0;
+    --background-gradient: linear-gradient(135deg, #0a0a0a 0%, #1a102e 50%, #0a0a0a 100%);
+    --neon-glow: 0 0 15px var(--quantum-teal);
+
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
@@ -64,16 +73,6 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 224.3 76.3% 48%;
   }
-  :root {
-    --void-core: #0a0a0a;
-    --singularity-purple: #2d1b4d;
-    --quantum-teal: #4fd1c5;
-    --event-horizon: #4b2e7a;
-    --input-bg: rgba(20, 10, 25, 0.9);
-    --text-color: #e0e0e0;
-    --background-gradient: linear-gradient(135deg, #0a0a0a 0%, #1a102e 50%, #0a0a0a 100%);
-    --neon-glow: 0 0 15px var(--quantum-teal);
-  }
 }
 
 @layer base {
@@ -82,4 +81,31 @@
     color: var(--text-color);
     font-family: 'Segoe UI', system-ui, sans-serif;
   }
+}
+
+.nebula-button {
+  background-color: var(--singularity-purple);
+  border: none;
+  padding: 0.75rem 1rem;
+  color: var(--text-color);
+  cursor: pointer;
+  border-radius: 4px;
+  box-shadow: var(--neon-glow);
+  transition: transform 0.2s ease;
+}
+
+.nebula-button:hover {
+  transform: translateY(-2px) scale(1.02);
+}
+
+.nebula-border {
+  border: 1px solid var(--event-horizon);
+  box-shadow: var(--neon-glow);
+}
+
+.gradient-heading {
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block; /* Ensures background-clip works properly on the text */
 }

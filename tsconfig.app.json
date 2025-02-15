@@ -15,7 +15,7 @@
     "jsx": "react-jsx",
 
     /* Linting & Type Safety */
-    "strict": false, // For now, the cosmic flow remains relaxed. Enable strict for full TypeScript sorcery.
+    "strict": true, // Enable strict mode for full TypeScript sorcery.
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noImplicitAny": false,

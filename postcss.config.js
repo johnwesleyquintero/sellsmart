@@ -1,10 +1,16 @@
+import postcssImport from 'postcss-import';
+import tailwindcss from 'tailwindcss';
+import autoprefixer from 'autoprefixer';
+import postcssNested from 'postcss-nested';
+import cssnano from 'cssnano';
+
 export default {
   plugins: [
-    require('postcss-import'),      // Import multiple CSS files like a wise sage
-    require('tailwindcss')(),         // Tailwind magic to build responsive designs
-    require('autoprefixer')(),        // Automatically add vendor prefixes for cross-browser harmony
-    require('postcss-nested')(),      // Write nested CSS rules for cleaner syntax
-    process.env.NODE_ENV === 'production' && 
-      require('cssnano')({ preset: 'default' }), // Minify CSS in production for performance
+    postcssImport,
+    tailwindcss(),
+    autoprefixer(),
+    postcssNested(),
+    process.env.NODE_ENV === 'production' ?
+      cssnano({ preset: 'default' }) : false,
   ].filter(Boolean),
 };
