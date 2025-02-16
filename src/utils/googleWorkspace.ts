@@ -26,6 +26,7 @@ export const testSpreadsheetConnection = async (spreadsheetId: string): Promise<
 
     return true;
   } catch (error) {
-    throw error;
+    console.error('Error testing spreadsheet connection:', error);
+    throw new Error(`Failed to connect to spreadsheet: ${error}`);
   }
 };

@@ -3,7 +3,7 @@ import { Button } from "../components/ui/button.tsx";
 import { ArrowRight } from "lucide-react";
 
 const Landing = () => {
-  console.log("Landing page rendered");
+  // console.log("Landing page rendered");
   return (
     <div className="min-h-screen bg-[var(--void-core)] text-[var(--text-color)] animate-fade-in-up relative overflow-hidden">
       <div className="absolute inset-0 bg-[var(--background-gradient)] opacity-20 z-0"></div>
