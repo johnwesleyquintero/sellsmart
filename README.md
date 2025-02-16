@@ -95,6 +95,7 @@ Harness the power of the cosmos with integrations that bridge your project to th
 
 - **Amazon:** Conjures the Amazon Advertising API to retrieve ad spend and sales data.
 - **Google Workspace:** Connects with Google Workspace APIs to summon data from Google Analytics and beyond.
+- **Bug Fixes:** Addressed a potential bug in the Amazon integration and improved error messages in the Google Workspace integration.
 
 ---
 

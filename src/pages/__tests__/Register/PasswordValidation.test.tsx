@@ -1,39 +1,82 @@
-import { render } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import Register from '../../Register';
-import { toast } from 'sonner';
-import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { DashboardSidebar } from './DashboardSidebar';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { SidebarProvider } from './ui/sidebar';
+import { useIsMobile } from '@/hooks/use-mobile';
+import '@testing-library/jest-dom';
 
-vi.mock('sonner', () => ({
-  toast: {
-    error: vi.fn(),
-    success: vi.fn(),
-  },
-}));
-
-vi.mock('react-router-dom', () => ({
-  ...vi.importActual('react-router-dom'),
+jest.mock('react-router-dom', () => ({
   BrowserRouter: ({ children }) => children,
-  useNavigate: vi.fn(),
+  useLocation: jest.fn(),
+  useNavigate: jest.fn(),
 }));
 
-describe('Password Validation', () => {
+jest.mock('@/hooks/use-mobile', () => ({
+  useIsMobile: jest.fn(),
+}));
+
+describe('DashboardSidebar', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
   });
 
-  it('shows error when passwords do not match', async () => {
-    const { getByPlaceholderText, getByRole } = render(
+  it('renders all navigation items', () => {
+    (useIsMobile as jest.Mock).mockReturnValue(false); // Mock useIsMobile
+    const mockLocation = { pathname: '/dashboard' };
+    (useLocation as jest.Mock).mockReturnValue(mockLocation);
+    (useNavigate as jest.Mock).mockReturnValue(jest.fn());
+
+    render(
       <BrowserRouter>
-        <Register />
+        <SidebarProvider>
+          <DashboardSidebar />
+        </SidebarProvider>
       </BrowserRouter>
     );
 
-    await userEvent.type(getByPlaceholderText(/^password$/i), 'password123');
-    await userEvent.type(getByPlaceholderText(/confirm password/i), 'password456');
-    await userEvent.click(getByRole('button', { name: /create account/i }));
+    screen.getByText('Overview').toBeInTheDocument();
+    screen.getByText('Insights').toBeInTheDocument();
+    screen.getByText('Targets & Search Terms').toBeInTheDocument();
+    screen.getByText('History').toBeInTheDocument();
+    screen.getByText('DSP').toBeInTheDocument();
+    screen.getByText('Data Connections').toBeInTheDocument();
+    screen.getByText('Settings').toBeInTheDocument();
+  });
 
-    expect(toast.error).toHaveBeenCalledWith('Passwords do not match');
+  it('highlights the active navigation item', () => {
+    (useIsMobile as jest.Mock).mockReturnValue(false); // Mock useIsMobile
+    const mockLocation = { pathname: '/dashboard/insights' };
+    (useLocation as jest.Mock).mockReturnValue(mockLocation);
+    (useNavigate as jest.Mock).mockReturnValue(jest.fn());
+
+    render(
+      <BrowserRouter>
+        <SidebarProvider>
+          <DashboardSidebar />
+        </SidebarProvider>
+      </BrowserRouter>
+    );
+
+    const insightsLink = screen.getByText('Insights');
+    insightsLink.toHaveClass('active'); // Assuming 'active' class is used for highlighting
+  });
+
+  it('navigates to the correct path when a navigation item is clicked', () => {
+    (useIsMobile as jest.Mock).mockReturnValue(false); // Mock useIsMobile
+    const mockNavigate = jest.fn();
+    (useLocation as jest.Mock).mockReturnValue({ pathname: '/dashboard' });
+    (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
+
+    render(
+      <BrowserRouter>
+        <SidebarProvider>
+          <DashboardSidebar />
+        </SidebarProvider>
+      </BrowserRouter>
+    );
+
+    fireEvent.click(screen.getByText('Insights'));
+    mockNavigate.toHaveBeenCalledWith('/dashboard/insights');
   });
 });

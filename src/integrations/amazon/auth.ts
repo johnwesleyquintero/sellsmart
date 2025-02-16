@@ -20,9 +20,9 @@
 import axios from 'axios';
 import qs from 'qs';
 
-const CLIENT_ID = 'YOUR_CLIENT_ID'; // Replace with your client ID
-const CLIENT_SECRET = 'YOUR_CLIENT_SECRET'; // Replace with your client secret
-const REDIRECT_URI = 'YOUR_REDIRECT_URI'; // Replace with your redirect URI
+const CLIENT_ID = 'YOUR_AMAZON_CLIENT_ID'; // Replace with your client ID
+const CLIENT_SECRET = 'YOUR_AMAZON_CLIENT_SECRET'; // Replace with your client secret
+const REDIRECT_URI = 'YOUR_AMAZON_REDIRECT_URI'; // Replace with your redirect URI
 const TOKEN_ENDPOINT = 'https://api.amazon.com/auth/o2/token';
 const AUTHORIZATION_ENDPOINT = 'https://www.amazon.com/ap/oa';
 
@@ -60,6 +60,11 @@ async function exchangeCodeForTokens(code: string): Promise<{ accessToken: strin
 
     accessToken = response.data.access_token;
     refreshToken = response.data.refresh_token;
+    // Store tokens in local storage
+    if (accessToken && refreshToken) {
+      localStorage.setItem('amazonAccessToken', accessToken);
+      localStorage.setItem('amazonRefreshToken', refreshToken);
+    }
     return { accessToken: response.data.access_token, refreshToken: response.data.refresh_token };
   } catch (error) {
     console.error('Token exchange error:', error);
@@ -91,6 +96,11 @@ async function refreshAccessToken(): Promise<string | null> {
 
     accessToken = response.data.access_token;
     refreshToken = response.data.refresh_token;
+    // Store tokens in local storage
+    if (accessToken && refreshToken) {
+      localStorage.setItem('amazonAccessToken', accessToken);
+      localStorage.setItem('amazonRefreshToken', refreshToken);
+    }
     return accessToken;
   } catch (error) {
     console.error('Token refresh error:', error);
@@ -99,6 +109,11 @@ async function refreshAccessToken(): Promise<string | null> {
 }
 
 async function getAccessToken(): Promise<string | null> {
+  // Try to get access token from local storage
+  if (!accessToken) {
+    accessToken = localStorage.getItem('amazonAccessToken');
+  }
+
   if (!accessToken) {
     // Check for a refresh token and attempt to refresh the access token
     if (refreshToken) {

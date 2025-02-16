@@ -1,17 +1,34 @@
 import { getAccessToken } from './auth';
 import { supabase } from '@/integrations/supabase/client';
+import axios from 'axios';
 
 // Placeholder for Amazon API calls
-const API_BASE_URL = 'https://advertising-api.amazon.com'; 
+const API_BASE_URL = 'https://advertising-api.amazon.com';
 const API_VERSION = 'v2';
 
-// Mock API Response Functions
-async function mockGetCampaigns() {
-  // console.log('Fetching campaigns (mock data)...');
-  return [
-    { id: 1, name: 'Mock Campaign 1' },
-    { id: 2, name: 'Mock Campaign 2' },
-  ];
+async function getCampaigns() {
+  try {
+    const accessToken = await getAccessToken();
+    if (!accessToken) {
+      console.error('No access token available.');
+      return null;
+    }
+
+    const response = await axios.get(
+      `${API_BASE_URL}/${API_VERSION}/campaigns`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching campaigns:', error);
+    // Consider more specific error handling based on the error type
+    return null;
+  }
 }
 
 async function mockGetAdGroups(campaignId: number) {
@@ -25,22 +42,26 @@ async function mockGetAdGroups(campaignId: number) {
 // Placeholder function for syncing campaigns to Supabase
 async function syncCampaignsToSupabase() {
   try {
-    const campaigns = await mockGetCampaigns();
-    if (!campaigns || campaigns.length === 0) {
+    const campaigns = await getCampaigns(); // Use the new getCampaigns function
+    if (!campaigns || !Array.isArray(campaigns) || campaigns.length === 0) { // Add check for array
       // console.warn('No campaigns to sync.');
       return;
     }
 
     for (const campaign of campaigns) {
-      const { error } = await supabase
-        .from('amazon_ads_metrics')
-        .insert({
-          campaign_id: String(campaign.id),
-          campaign_name: campaign.name,
-        });
+      try {
+        const { error: insertError } = await supabase
+          .from('amazon_ads_metrics')
+          .insert({
+            campaign_id: String(campaign.id),
+            campaign_name: campaign.name,
+          });
 
-      if (error) {
-        console.error('Error inserting campaign:', error.message);
+        if (insertError) {
+          console.error('Error inserting campaign:', insertError.message);
+        }
+      } catch (error) {
+        console.error('Error inserting campaign:', error);
       }
     }
 
@@ -50,6 +71,6 @@ async function syncCampaignsToSupabase() {
   }
 }
 
-export { mockGetCampaigns as getCampaigns, mockGetAdGroups as getAdGroups, syncCampaignsToSupabase };
+export { getCampaigns, mockGetAdGroups as getAdGroups, syncCampaignsToSupabase };
 
 // Placeholder function for making authenticated API requests

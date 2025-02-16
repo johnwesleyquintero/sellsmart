@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "../components/ui/button.tsx";
 import { ArrowRight } from "lucide-react";
+import AmazonAuthButton from "../components/AmazonAuthButton.tsx"; // Import the new component
 
 const Landing = () => {
   // console.log("Landing page rendered");
@@ -32,6 +33,7 @@ const Landing = () => {
           <h1 className="text-6xl font-semibold mb-6 bg-[var(--gradient-text)] text-transparent bg-clip-text">
             Transform Your Amazon Ads Data.
           </h1>
+          <AmazonAuthButton /> {/* Add the AmazonAuthButton component */}
           <p className="text-xl text-[var(--text-color)] mb-8 leading-relaxed">
             Powerful analytics dashboard for monitoring and optimizing your Amazon advertising performance.
             Get started today and unlock the potential of your data.
