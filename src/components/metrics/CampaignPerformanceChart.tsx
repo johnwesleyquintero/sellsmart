@@ -28,17 +28,17 @@ export function CampaignPerformanceChart({ data }: CampaignPerformanceProps) {
             data={data}
             margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="#444" />
-            <XAxis dataKey="period" stroke="#888" />
-            <YAxis stroke="#888" />
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--event-horizon)" />
+            <XAxis dataKey="period" stroke="var(--text-color)" />
+            <YAxis stroke="var(--text-color)" />
             <Tooltip 
-              contentStyle={{ backgroundColor: '#1a1a1a', border: '1px solid #333' }}
-              labelStyle={{ color: '#888' }}
+              contentStyle={{ backgroundColor: 'var(--void-core)', border: '1px solid var(--event-horizon)' }}
+              labelStyle={{ color: 'var(--text-color)' }}
             />
             <Legend />
-            <Line type="monotone" dataKey="spend" stroke="#8884d8" name="Spend" />
-            <Line type="monotone" dataKey="sales" stroke="#82ca9d" name="Sales" />
-            <Line type="monotone" dataKey="roas" stroke="#ffc658" name="ROAS" />
+            <Line type="monotone" dataKey="spend" stroke="var(--singularity-purple)" name="Spend" />
+            <Line type="monotone" dataKey="sales" stroke="var(--quantum-teal)" name="Sales" />
+            <Line type="monotone" dataKey="roas" stroke="#e2e8f0" name="ROAS" />
           </LineChart>
         </div>
       </CardContent>
