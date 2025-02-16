@@ -35,6 +35,7 @@
 
 export async function generateOptimizationSuggestion(prompt: string) {
   // Placeholder implementation
+  // TODO: Replace console.log with proper logging
   console.log("Generating optimization suggestion for:", prompt);
   return "This is a placeholder suggestion.";
 }
