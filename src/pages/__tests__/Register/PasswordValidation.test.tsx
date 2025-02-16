@@ -1,4 +1,3 @@
-
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
@@ -15,7 +14,8 @@ vi.mock('sonner', () => ({
 
 vi.mock('react-router-dom', () => ({
   ...vi.importActual('react-router-dom'),
-  useNavigate: () => vi.fn(),
+  BrowserRouter: ({ children }) => children,
+  useNavigate: vi.fn(),
 }));
 
 describe('Password Validation', () => {

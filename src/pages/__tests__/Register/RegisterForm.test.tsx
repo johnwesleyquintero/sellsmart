@@ -1,8 +1,13 @@
-
 import { render } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import Register from '../../Register';
 import { vi, describe, it, expect } from 'vitest';
+
+vi.mock('react-router-dom', () => ({
+  ...vi.importActual('react-router-dom'),
+  BrowserRouter: ({ children }) => children,
+  useNavigate: vi.fn(),
+}));
 
 describe('Register Form Rendering', () => {
   it('renders registration form with all fields', () => {

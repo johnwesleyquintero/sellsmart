@@ -82,7 +82,7 @@ Every component is a mighty rune in our saga:
 - **`AuthProvider`**: The guardian that channels authentication throughout the realm.
 - **`DashboardLayout`**: The grand layout that underpins our dashboards, offering structure and stability.
 - **`DashboardSidebar`**: A navigational compass guiding users through the dashboard’s labyrinth.
-- **`MetricCard`**: The enchanted card that displays crucial KPIs with luminous clarity.
+- **`MetricCardBase`**: The base component for displaying key performance metrics.
 - **`MetricsTabs`**: A set of celestial tabs, each opening a window into a different dimension of metrics.
 - **`CampaignAnalysis`**: The oracle for dissecting campaign performance.
 - **`KeywordAnalysis`**: The seer that deciphers the secrets of keyword dynamics.
@@ -130,4 +130,3 @@ Contributions to this cosmic saga are always welcome! To join our celestial fell
 ---
 
 *May this God Mode document guide you on your journey through the digital cosmos. Let your code shine like the Northern Lights, and may every contribution add to the epic saga of **SellSmart Analytics**!*
-
