@@ -3,6 +3,7 @@ import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { GoogleIntegrationSettings } from "@/components/settings/GoogleIntegrationSettings";
 import { useGoogleWorkspaceSettings } from "@/hooks/useGoogleWorkspaceSettings";
 import { DataImport } from "@/components/DataImport";
+import { DataSourceList } from "@/components/DataSourceList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 
@@ -14,6 +15,8 @@ const DashboardImport = () => {
       <div className="max-w-7xl mx-auto space-y-6">
         <h1 className="text-2xl font-bold text-gray-900">Data Connections</h1>
         <p className="text-gray-500">Configure your data sources and import options.</p>
+
+        <DataSourceList />
 
         <Tabs defaultValue="googlesheets" className="w-full">
           <TabsList className="w-full">
