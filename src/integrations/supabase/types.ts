@@ -438,42 +438,6 @@ export type Database = {
         }
         Relationships: []
       }
-      data_source_configs: {
-        Row: {
-          config: Json
-          created_at: string
-          header_mapping: Json
-          id: string
-          is_active: boolean | null
-          name: string
-          source_type: Database["public"]["Enums"]["data_source_type"]
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          config?: Json
-          created_at?: string
-          header_mapping?: Json
-          id?: string
-          is_active?: boolean | null
-          name: string
-          source_type: Database["public"]["Enums"]["data_source_type"]
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          config?: Json
-          created_at?: string
-          header_mapping?: Json
-          id?: string
-          is_active?: boolean | null
-          name?: string
-          source_type?: Database["public"]["Enums"]["data_source_type"]
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
       google_workspace_settings: {
         Row: {
           auto_sync: boolean | null
@@ -653,7 +617,7 @@ export type Database = {
       }
     }
     Enums: {
-      data_source_type: "google_sheets" | "csv"
+      [_ in never]: never
     }
     CompositeTypes: {
       [_ in never]: never
