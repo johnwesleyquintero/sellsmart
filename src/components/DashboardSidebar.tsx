@@ -1,3 +1,4 @@
+
 import { DashboardMenuItem } from "./ui/DashboardMenuItem";
 import { DashboardGroupLabel } from "./ui/DashboardGroupLabel";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -62,7 +63,7 @@ export function DashboardSidebar() {
   const location = useLocation();
 
   return (
-    <Sidebar className="w-sidebar">
+    <Sidebar>
       <SidebarContent>
         <SidebarGroup>
           <DashboardGroupLabel label="Analytics" />
@@ -70,7 +71,6 @@ export function DashboardSidebar() {
             <SidebarMenu>
               {navigationItems.map((item) => {
                 const Icon = item.icon;
-                const isActive = location.pathname === item.path;
                 return (
                   <DashboardMenuItem
                     key={item.title}
@@ -78,7 +78,6 @@ export function DashboardSidebar() {
                     icon={<Icon className="w-4 h-4" />}
                     path={item.path}
                     description={item.description}
-                    active={isActive}
                   />
                 );
               })}
@@ -88,7 +87,6 @@ export function DashboardSidebar() {
                 icon={<Settings className="w-4 h-4" />}
                 path="/dashboard/settings"
                 description="Settings"
-                active={location.pathname === "/dashboard/settings"}
               />
             </SidebarMenu>
           </SidebarGroupContent>

@@ -54,8 +54,8 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[var(--background-gradient)] p-4">
-      <Card className="w-full max-w-md p-8 bg-[var(--void-core)]/40 border-0">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-spotify-darker via-[#1a2c1a] to-spotify-darker p-4">
+      <Card className="w-full max-w-md p-8 bg-black/40 border-0">
         <h1 className="text-2xl font-bold text-white mb-6 text-center">Login</h1>
         <form onSubmit={handleLogin} className="space-y-4">
           <div>

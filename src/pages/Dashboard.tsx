@@ -1,11 +1,10 @@
+
 import { useState } from "react";
 import { DataImport } from "@/components/DataImport";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { AmazonMetricsDisplay } from "@/components/AmazonMetricsDisplay";
-import { calculateTacosData } from '@/utils/tacos';
-import { calculateKeywordRankings } from '@/utils/keywordRankings';
 import { calculateMetrics } from "@/utils/amazonMetrics";
 import { DashboardFilters } from "@/components/dashboard/DashboardFilters";
 import { DashboardTabs } from "@/components/dashboard/DashboardTabs";
@@ -51,10 +50,28 @@ const Dashboard = () => {
       if (error) throw error;
 
       // Calculate TACoS data
-      const tacosData = calculateTacosData(metrics);
+      const tacosData = metrics?.map(metric => ({
+        date: metric.date,
+        acos: metric.acos || 0,
+        tacos: ((metric.amount_spent || 0) / (metric.total_ad_sales || 1)) * 100
+      })) || [];
 
       // Calculate keyword rankings
-      const keywordData = calculateKeywordRankings(metrics);
+      const keywordData = metrics?.reduce((acc: any[], metric) => {
+        if (metric.keyword && metric.impressions) {
+          const existing = acc.find(k => k.keyword === metric.keyword);
+          if (!existing) {
+            acc.push({
+              keyword: metric.keyword,
+              rank: acc.length + 1,
+              previousRank: acc.length + 2,
+              searchVolume: metric.impressions,
+              change: 1
+            });
+          }
+        }
+        return acc;
+      }, []).slice(0, 10) || [];
 
       return {
         metrics: calculateMetrics(metrics || []),
@@ -84,7 +101,7 @@ const Dashboard = () => {
               conversionRate={metricsData.metrics.performance?.conversionRate || 0}
             />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <TACOSChart data={metricsData.tacosData} />
               <KeywordRankingTable rankings={metricsData.keywordRankings} />
             </div>

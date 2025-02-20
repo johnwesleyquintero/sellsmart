@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -53,11 +54,11 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-nebula-dark animate-fade-in-up">
-      <div className="w-full max-w-md p-8 space-y-6 bg-nebula-purple rounded-lg">
+    <div className="min-h-screen flex items-center justify-center bg-spotify-darker">
+      <div className="w-full max-w-md p-8 space-y-6 bg-spotify-light rounded-lg">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-nebula-text">Create Account</h1>
-          <p className="text-nebula-text">Get started with your analytics dashboard</p>
+          <h1 className="text-2xl font-bold text-white">Create Account</h1>
+          <p className="text-gray-400">Get started with your analytics dashboard</p>
         </div>
         
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -101,14 +102,14 @@ const Register = () => {
               disabled={isLoading}
             />
           </div>
-          <Button type="submit" className="w-full bg-nebula-teal hover:bg-nebula-teal/90 text-nebula-dark" disabled={isLoading}>
+          <Button type="submit" className="w-full bg-spotify-green hover:bg-spotify-green/90" disabled={isLoading}>
             {isLoading ? "Creating Account..." : "Create Account"}
           </Button>
         </form>
 
         <div className="text-center text-sm">
-          <span className="text-nebula-text">Already have an account? </span>
-          <Link to="/login" className="text-nebula-teal hover:underline">
+          <span className="text-gray-400">Already have an account? </span>
+          <Link to="/login" className="text-spotify-green hover:underline">
             Sign in
           </Link>
         </div>

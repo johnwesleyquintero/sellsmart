@@ -14,9 +14,6 @@
     "skipLibCheck": true,
     "allowJs": true,
     "noUnusedLocals": false,
-    "strictNullChecks": false,
-    "moduleResolution": "bundler",
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true
+    "strictNullChecks": false
   }
 }

@@ -7,10 +7,9 @@ interface DashboardMenuItemProps {
   icon: ReactNode;
   path: string;
   description: string;
-  active?: boolean;
 }
 
-export function DashboardMenuItem({ title, icon, path, description, active }: DashboardMenuItemProps) {
+export function DashboardMenuItem({ title, icon, path, description }: DashboardMenuItemProps) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -22,7 +21,7 @@ export function DashboardMenuItem({ title, icon, path, description, active }: Da
     <SidebarMenuItem key={title}>
       <SidebarMenuButton
         onClick={handleNavigation}
-        isActive={active || location.pathname === path}
+        isActive={location.pathname === path}
         className="flex items-center gap-2"
         title={description}
       >

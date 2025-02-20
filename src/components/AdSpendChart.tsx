@@ -17,19 +17,19 @@ export function AdSpendChart() {
         <AreaChart data={data}>
           <defs>
             <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="var(--quantum-teal)" stopOpacity={0.3} />
-              <stop offset="95%" stopColor="var(--quantum-teal)" stopOpacity={0} />
+              <stop offset="5%" stopColor="#1ED760" stopOpacity={0.3} />
+              <stop offset="95%" stopColor="#1ED760" stopOpacity={0} />
             </linearGradient>
           </defs>
           <XAxis
             dataKey="name"
-            stroke="var(--text-color)"
+            stroke="#888888"
             fontSize={12}
             tickLine={false}
             axisLine={false}
           />
           <YAxis
-            stroke="var(--text-color)"
+            stroke="#888888"
             fontSize={12}
             tickLine={false}
             axisLine={false}

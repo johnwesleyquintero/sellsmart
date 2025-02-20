@@ -6,7 +6,7 @@
     "module": "ESNext",
     "skipLibCheck": true,
 
-    /* Bundler mode incantations */
+    /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
@@ -14,25 +14,17 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
-    /* Linting & Type Safety */
-    "strict": true, // Unleash the full TypeScript sorcery!
-    "strictNullChecks": true,
+    /* Linting */
+    "strict": false,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noImplicitAny": false,
     "noFallthroughCasesInSwitch": false,
 
-    /* Path & Module Enhancements */
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    },
-
-    /* Additional Cosmic Enhancements */
-    "forceConsistentCasingInFileNames": true,  // Keep file naming as consistent as the stars
-    "resolveJsonModule": true,                 // Summon JSON modules like ancient scrolls
-    "exactOptionalPropertyTypes": true,        // For precise control over optional properties
-    "useUnknownInCatchVariables": true           // Enhance error handling with the wisdom of unknown types
+    }
   },
   "include": ["src"]
 }

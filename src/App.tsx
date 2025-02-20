@@ -30,30 +30,30 @@ const queryClient = new QueryClient({
 // Protected route with auth check
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, isLoading } = useAuth();
-
+  
   if (isLoading) {
     return <div>Loading...</div>;
   }
-
+  
   if (!user) {
     return <Navigate to="/login" />;
   }
-
+  
   return <>{children}</>;
 };
 
 // Admin route protection
 const AdminRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, isAdmin, isLoading } = useAuth();
-
+  
   if (isLoading) {
     return <div>Loading...</div>;
   }
-
+  
   if (!user || !isAdmin) {
     return <Navigate to="/dashboard" />;
   }
-
+  
   return <>{children}</>;
 };
 

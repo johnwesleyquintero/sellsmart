@@ -24,8 +24,8 @@ export function TACOSChart({ data }: TACOSChartProps) {
               <XAxis dataKey="date" />
               <YAxis />
               <Tooltip />
-              <Line type="monotone" dataKey="acos" stroke="var(--quantum-teal)" name="ACoS" />
-              <Line type="monotone" dataKey="tacos" stroke="var(--event-horizon)" name="TACoS" />
+              <Line type="monotone" dataKey="acos" stroke="#2563eb" name="ACoS" />
+              <Line type="monotone" dataKey="tacos" stroke="#64748b" name="TACoS" />
             </LineChart>
           </ResponsiveContainer>
         </div>
