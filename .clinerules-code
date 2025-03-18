@@ -1,0 +1,55 @@
+# Developer Rules
+
+***src\content\documentation***
+
+1. Framework Structure
+- Use React as the main framework
+- Follow component-based architecture
+- Keep pages in src/pages directory
+- Store components in src/components
+- Place layouts in src/layouts
+- Maintain utilities in src/utils
+
+2. Code Style
+- Use TypeScript for type safety
+- Follow ESLint configuration
+- Maintain consistent naming conventions
+- Use camelCase for variables and functions
+- Use PascalCase for components
+- Add JSDoc comments for complex functions
+
+3. Component Guidelines
+- Create reusable components
+- Keep components small and focused
+- Use props for component configuration
+- Implement proper prop validation
+- Avoid prop drilling when possible
+- Use composition over inheritance
+
+4. Performance
+- Optimize images using react's image components
+- Implement lazy loading where appropriate
+- Minimize client-side JavaScript
+- Use static rendering when possible
+- Implement proper caching strategies
+
+5. Version Control
+- Follow conventional commits
+- Create feature branches from main
+- Submit detailed pull requests
+- Keep commits atomic and focused
+- Write meaningful commit messages
+
+6. Testing
+- Write unit tests for utilities
+- Create component tests
+- Implement end-to-end tests
+- Maintain good test coverage
+- Follow test-driven development when possible
+
+7. Documentation
+- Document component APIs
+- Maintain README files
+- Add inline documentation for complex logic
+- Keep documentation up-to-date
+- Document build and deployment processes
