@@ -1,5 +1,5 @@
 
-# ASYND: Amazon Advertising Analytics Dashboard
+# SellSmart: Amazon Advertising Analytics Dashboard
 
 A streamlined dashboard for Amazon Sellers to analyze their advertising data using CSV files or Google Sheets as data sources.
 
